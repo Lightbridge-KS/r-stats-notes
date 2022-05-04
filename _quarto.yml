@@ -1,0 +1,26 @@
+project:
+  type: book
+
+book:
+  title: "Book Template"
+  author: "Jane Doe"
+  date: "4/16/2022" # `today` for current date when render
+  #site-url: your-site-url
+  #repo-url: your-repo-url
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+# freeze computational output ? (see: https://quarto.org/docs/projects/code-execution.html#freeze)
+#freeze: auto
