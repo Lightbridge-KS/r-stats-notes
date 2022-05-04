@@ -2,8 +2,8 @@ project:
   type: book
 
 book:
-  title: "Book Template"
-  author: "Jane Doe"
+  title: "Stats & ML Notes"
+  author: "Kittipos Sirivongrungson"
   date: "4/16/2022" # `today` for current date when render
   #site-url: your-site-url
   #repo-url: your-repo-url
@@ -18,9 +18,9 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
-  pdf:
-    documentclass: scrreprt
+  #pdf:
+    #documentclass: scrreprt
 
 
 # freeze computational output ? (see: https://quarto.org/docs/projects/code-execution.html#freeze)
-#freeze: auto
+freeze: auto
