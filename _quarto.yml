@@ -17,7 +17,10 @@ bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: superhero
+    number-sections: false
   #pdf:
     #documentclass: scrreprt
 
