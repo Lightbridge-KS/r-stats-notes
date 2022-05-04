@@ -1,9 +1,7 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+::: callout-note
+### About
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
-
-```{r}
-1 + 1
-```
+This is my notes on statistics and machine learning using `R`.
+:::
