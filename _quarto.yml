@@ -5,8 +5,8 @@ book:
   title: "Stats & ML Notes"
   author: "Kittipos Sirivongrungson"
   date: "4/16/2022" # `today` for current date when render
-  #site-url: your-site-url
-  #repo-url: your-repo-url
+  site-url: https://r-stats-lightbridge.netlify.app
+  repo-url: https://github.com/Lightbridge-KS/r-stats-notes
   chapters:
     - index.qmd
     - intro.qmd
