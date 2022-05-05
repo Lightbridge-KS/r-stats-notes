@@ -9,7 +9,9 @@ book:
   repo-url: https://github.com/Lightbridge-KS/r-stats-notes
   chapters:
     - index.qmd
-    - intro.qmd
+    - part: "Inferential Stats"
+      chapters:
+      - infer.qmd
     - summary.qmd
     - references.qmd
 
@@ -18,7 +20,7 @@ bibliography: references.bib
 format:
   html:
     theme:
-      light: cosmo
+      light: zephyr #cosmo
       dark: superhero
     number-sections: false
   #pdf:

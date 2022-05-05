@@ -1,0 +1,171 @@
+# Infer Package Intro
+
+
+```{r setup, include=FALSE}
+here::i_am("infer.qmd")
+library(here)
+source(here("_common.R"))
+```
+
+
+I will explore [`{infer}`](https://infer.tidymodels.org/index.html) Package.
+
+```{r setup-show, warning=FALSE, message=FALSE}
+library(infer)
+library(dplyr)
+```
+
+## Explore Data
+
+```{r}
+glimpse(gss)
+```
+
+## Specifying Response `specify()`
+
+Specify response and explanatory variable as formula or arguments.
+
+### Continuous Response
+
+`age` (num) ~ `partyid` (fct)
+
+```{r}
+gss_spec_age_partyid <- gss %>% 
+  specify(age ~ partyid)
+
+# Object Type
+sloop::otype(gss_spec_age_partyid)
+# Class
+class(gss_spec_age_partyid)
+# Print
+gss_spec_age_partyid
+```
+
+
+### Categorical Response
+
+specifying for inference on proportions
+
+you will need to use the `success` argument to specify which level of your response variable is a success.
+
+```{r}
+gss %>%
+  specify(response = college, success = "degree")
+```
+
+
+## Declare the NULL Hypothesis
+
+declare a null hypothesis using `hypothesize()`.
+
+`null`: "independence" or "point".
+
+### Test Independence
+
+If the null hypothesis is that the mean number of hours worked per week in our population is 40, we would write:
+
+```{r}
+gss %>%
+  specify(college ~ partyid, success = "degree") %>%
+  hypothesize(null = "independence")
+```
+### Test Point Estimate
+
+
+```{r}
+gss %>%
+  specify(response = hours) %>%
+  hypothesize(null = "point", mu = 40)
+```
+
+## `generate()` NULL distribution 
+
+```{r}
+set.seed(1)
+
+gss %>%
+  specify(response = hours) %>%
+  hypothesize(null = "point", mu = 40) %>%
+  generate(reps = 1000, type = "bootstrap")
+```
+
+
+## Calculate Summary Stats
+
+find the point estimate
+
+```{r obs_mean}
+obs_mean <- gss %>%
+  specify(response = hours) %>%
+  calculate(stat = "mean")
+
+obs_mean
+```
+
+generate a null distribution
+
+```{r null_dist}
+null_dist <- gss %>%
+  specify(response = hours) %>%
+  hypothesize(null = "point", mu = 40) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+null_dist
+```
+
+## Visualize Null Dist
+
+```{r}
+null_dist %>%
+  visualize()
+```
+
+Where does our sample’s observed statistic lie on this distribution? We can use the `obs_stat` argument to specify this.
+
+```{r}
+null_dist %>%
+  visualize() +
+  shade_p_value(obs_stat = obs_mean, direction = "two-sided")
+```
+
+## P-value
+
+get a two-tailed p-value
+
+
+```{r}
+p_value <- null_dist %>%
+  get_p_value(obs_stat = obs_mean, direction = "two-sided")
+
+p_value
+```
+
+## Confidence Interval
+
+```{r}
+# generate a distribution like the null distribution, 
+# though exclude the null hypothesis from the pipeline
+boot_dist <- gss %>%
+  specify(response = hours) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+# start with the bootstrap distribution
+ci <- boot_dist %>%
+  # calculate the confidence interval around the point estimate
+  get_confidence_interval(point_estimate = obs_mean,
+                          # at the 95% confidence level
+                          level = .95,
+                          # using the standard error
+                          type = "se")
+
+ci
+```
+
+```{r}
+boot_dist %>%
+  visualize() +
+  shade_confidence_interval(endpoints = ci)
+```
+
