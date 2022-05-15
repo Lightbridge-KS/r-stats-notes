@@ -2,7 +2,7 @@
 
 
 ```{r setup, include=FALSE}
-here::i_am("infer.qmd")
+here::i_am("stats/infer.qmd")
 library(here)
 source(here("_common.R"))
 ```
