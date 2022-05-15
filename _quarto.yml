@@ -11,6 +11,7 @@ book:
     - index.qmd
     - part: "Inferential Stats"
       chapters:
+      - "stats/normality-test.qmd"
       - "stats/infer.qmd"
     - summary.qmd
     - references.qmd

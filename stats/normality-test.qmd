@@ -1,0 +1,111 @@
+# Normality Test
+
+```{r}
+#| label: setup
+#| include: false
+here::i_am("stats/normality-test.qmd")
+library(here)
+source(here("_common.R"))
+```
+
+```{r set-pkg, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rstatix)
+library(ggpubr)
+```
+
+
+**References**
+
+-   [Normality test in R](https://www.datanovia.com/en/lessons/normality-test-in-r/): data novia
+
+
+
+## Explore Data
+
+```{r}
+glimpse(ToothGrowth)
+```
+
+```{r}
+skimr::skim(ToothGrowth)
+```
+
+## Normality Check
+
+::: callout-tip
+### Objective
+
+We want to test if the variable `len` (tooth length) is normally distributed.
+:::
+
+
+## Visual Method
+
+### Histogram
+
+```{r}
+ToothGrowth %>% 
+  ggplot(aes(len)) +
+  geom_histogram()
+```
+
+### Density
+
+```{r}
+ggdensity(ToothGrowth$len, fill = "lightgray")
+```
+
+
+### QQ Plot
+
+
+```{r}
+ggqqplot(ToothGrowth$len)
+```
+
+```{r}
+ToothGrowth %>% 
+  ggplot(aes(sample = len)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+
+
+
+
+
+## Shapiro-Wilk’s normality test
+
+::: callout-note
+### Hypothesis
+
+$H_0$ = “sample distribution is normal”
+:::
+
+
+### One Variable
+
+```{r}
+shapiro.test(ToothGrowth$len)
+```
+
+Or
+
+```{r}
+ToothGrowth %>% shapiro_test(len)
+```
+
+P-value > 0.05; implying that the distribution of the data are not significantly different from normal distribution; therefore, we can assume normality.
+
+### Grouped Data
+
+```{r}
+ToothGrowth %>%
+  group_by(dose) %>%
+  shapiro_test(len)
+```
+
+
+
