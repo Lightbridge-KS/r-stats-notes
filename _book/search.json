@@ -7,6 +7,41 @@
     "text": "About\n\n\n\nThis is my notes on statistics and machine learning using R."
   },
   {
+    "objectID": "stats/normality-test.html",
+    "href": "stats/normality-test.html",
+    "title": "Normality Test",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(rstatix)\nlibrary(ggpubr)\nReferences"
+  },
+  {
+    "objectID": "stats/normality-test.html#explore-data",
+    "href": "stats/normality-test.html#explore-data",
+    "title": "Normality Test",
+    "section": "Explore Data",
+    "text": "Explore Data\n\nglimpse(ToothGrowth)\n#> Rows: 60\n#> Columns: 3\n#> $ len  <dbl> 4.2, 11.5, 7.3, 5.8, 6.4, 10.0, 11.2, 11.2, 5.2, 7.0, 16.5, 16.5,…\n#> $ supp <fct> VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, V…\n#> $ dose <dbl> 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, …\n\n\nskimr::skim(ToothGrowth)\n\n\nData summary\n\n\nName\nToothGrowth\n\n\nNumber of rows\n60\n\n\nNumber of columns\n3\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\nfactor\n1\n\n\nnumeric\n2\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: factor\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nordered\nn_unique\ntop_counts\n\n\n\n\nsupp\n0\n1\nFALSE\n2\nOJ: 30, VC: 30\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\nhist\n\n\n\n\nlen\n0\n1\n18.81\n7.65\n4.2\n13.07\n19.25\n25.27\n33.9\n▅▃▅▇▂\n\n\ndose\n0\n1\n1.17\n0.63\n0.5\n0.50\n1.00\n2.00\n2.0\n▇▇▁▁▇"
+  },
+  {
+    "objectID": "stats/normality-test.html#normality-check",
+    "href": "stats/normality-test.html#normality-check",
+    "title": "Normality Test",
+    "section": "Normality Check",
+    "text": "Normality Check\n\n\n\n\n\n\nObjective\n\n\n\nWe want to test if the variable len (tooth length) is normally distributed."
+  },
+  {
+    "objectID": "stats/normality-test.html#visual-method",
+    "href": "stats/normality-test.html#visual-method",
+    "title": "Normality Test",
+    "section": "Visual Method",
+    "text": "Visual Method\n\nHistogram\n\nToothGrowth %>% \n  ggplot(aes(len)) +\n  geom_histogram()\n#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\nDensity\n\nggdensity(ToothGrowth$len, fill = \"lightgray\")\n\n\n\n\n\n\nQQ Plot\n\nggqqplot(ToothGrowth$len)\n\n\n\n\n\nToothGrowth %>% \n  ggplot(aes(sample = len)) +\n  geom_qq() +\n  geom_qq_line()"
+  },
+  {
+    "objectID": "stats/normality-test.html#shapiro-wilks-normality-test",
+    "href": "stats/normality-test.html#shapiro-wilks-normality-test",
+    "title": "Normality Test",
+    "section": "Shapiro-Wilk’s normality test",
+    "text": "Shapiro-Wilk’s normality test\n\n\n\n\n\n\nHypothesis\n\n\n\n\\(H_0\\) = “sample distribution is normal”\n\n\n\nOne Variable\n\nshapiro.test(ToothGrowth$len)\n#> \n#>  Shapiro-Wilk normality test\n#> \n#> data:  ToothGrowth$len\n#> W = 0.96743, p-value = 0.1091\n\nOr\n\nToothGrowth %>% shapiro_test(len)\n#> # A tibble: 1 × 3\n#>   variable statistic     p\n#>   <chr>        <dbl> <dbl>\n#> 1 len          0.967 0.109\n\nP-value > 0.05; implying that the distribution of the data are not significantly different from normal distribution; therefore, we can assume normality.\n\n\nGrouped Data\n\nToothGrowth %>%\n  group_by(dose) %>%\n  shapiro_test(len)\n#> # A tibble: 3 × 4\n#>    dose variable statistic     p\n#>   <dbl> <chr>        <dbl> <dbl>\n#> 1   0.5 len          0.941 0.247\n#> 2   1   len          0.931 0.164\n#> 3   2   len          0.978 0.902"
+  },
+  {
     "objectID": "stats/infer.html",
     "href": "stats/infer.html",
     "title": "Infer Package Intro",
@@ -68,41 +103,6 @@
     "title": "Infer Package Intro",
     "section": "Confidence Interval",
     "text": "Confidence Interval\n\n# generate a distribution like the null distribution, \n# though exclude the null hypothesis from the pipeline\nboot_dist <- gss %>%\n  specify(response = hours) %>%\n  generate(reps = 1000, type = \"bootstrap\") %>%\n  calculate(stat = \"mean\")\n\n# start with the bootstrap distribution\nci <- boot_dist %>%\n  # calculate the confidence interval around the point estimate\n  get_confidence_interval(point_estimate = obs_mean,\n                          # at the 95% confidence level\n                          level = .95,\n                          # using the standard error\n                          type = \"se\")\n\nci\n#> # A tibble: 1 × 2\n#>   lower_ci upper_ci\n#>      <dbl>    <dbl>\n#> 1     40.1     42.7\n\n\nboot_dist %>%\n  visualize() +\n  shade_confidence_interval(endpoints = ci)"
-  },
-  {
-    "objectID": "stats/normality-test.html",
-    "href": "stats/normality-test.html",
-    "title": "Normality Test",
-    "section": "",
-    "text": "library(tidyverse)\nlibrary(rstatix)\nlibrary(ggpubr)\nReferences"
-  },
-  {
-    "objectID": "stats/normality-test.html#explore-data",
-    "href": "stats/normality-test.html#explore-data",
-    "title": "Normality Test",
-    "section": "Explore Data",
-    "text": "Explore Data\n\nglimpse(ToothGrowth)\n#> Rows: 60\n#> Columns: 3\n#> $ len  <dbl> 4.2, 11.5, 7.3, 5.8, 6.4, 10.0, 11.2, 11.2, 5.2, 7.0, 16.5, 16.5,…\n#> $ supp <fct> VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, V…\n#> $ dose <dbl> 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, …\n\n\nskimr::skim(ToothGrowth)\n\n\nData summary\n\n\nName\nToothGrowth\n\n\nNumber of rows\n60\n\n\nNumber of columns\n3\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\nfactor\n1\n\n\nnumeric\n2\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: factor\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nordered\nn_unique\ntop_counts\n\n\n\n\nsupp\n0\n1\nFALSE\n2\nOJ: 30, VC: 30\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\nhist\n\n\n\n\nlen\n0\n1\n18.81\n7.65\n4.2\n13.07\n19.25\n25.27\n33.9\n▅▃▅▇▂\n\n\ndose\n0\n1\n1.17\n0.63\n0.5\n0.50\n1.00\n2.00\n2.0\n▇▇▁▁▇"
-  },
-  {
-    "objectID": "stats/normality-test.html#normality-check",
-    "href": "stats/normality-test.html#normality-check",
-    "title": "Normality Test",
-    "section": "Normality Check",
-    "text": "Normality Check\n\n\n\n\n\n\nObjective\n\n\n\nWe want to test if the variable len (tooth length) is normally distributed."
-  },
-  {
-    "objectID": "stats/normality-test.html#visual-method",
-    "href": "stats/normality-test.html#visual-method",
-    "title": "Normality Test",
-    "section": "Visual Method",
-    "text": "Visual Method\n\nHistogram\n\nToothGrowth %>% \n  ggplot(aes(len)) +\n  geom_histogram()\n#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\nDensity\n\nggdensity(ToothGrowth$len, fill = \"lightgray\")\n\n\n\n\n\n\nQQ Plot\n\nggqqplot(ToothGrowth$len)\n\n\n\n\n\nToothGrowth %>% \n  ggplot(aes(sample = len)) +\n  geom_qq() +\n  geom_qq_line()"
-  },
-  {
-    "objectID": "stats/normality-test.html#shapiro-wilks-normality-test",
-    "href": "stats/normality-test.html#shapiro-wilks-normality-test",
-    "title": "Normality Test",
-    "section": "Shapiro-Wilk’s normality test",
-    "text": "Shapiro-Wilk’s normality test\n\n\n\n\n\n\nHypothesis\n\n\n\n\\(H_0\\) = “sample distribution is normal”\n\n\n\nOne Variable\n\nshapiro.test(ToothGrowth$len)\n#> \n#>  Shapiro-Wilk normality test\n#> \n#> data:  ToothGrowth$len\n#> W = 0.96743, p-value = 0.1091\n\nOr\n\nToothGrowth %>% shapiro_test(len)\n#> # A tibble: 1 × 3\n#>   variable statistic     p\n#>   <chr>        <dbl> <dbl>\n#> 1 len          0.967 0.109\n\nP-value > 0.05; implying that the distribution of the data are not significantly different from normal distribution; therefore, we can assume normality.\n\n\nGrouped Data\n\nToothGrowth %>%\n  group_by(dose) %>%\n  shapiro_test(len)\n#> # A tibble: 3 × 4\n#>    dose variable statistic     p\n#>   <dbl> <chr>        <dbl> <dbl>\n#> 1   0.5 len          0.941 0.247\n#> 2   1   len          0.931 0.164\n#> 3   2   len          0.978 0.902"
   },
   {
     "objectID": "summary.html",
