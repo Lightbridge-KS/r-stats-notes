@@ -1,0 +1,134 @@
+---
+title: "Wilcoxon Test"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/wilcoxon.qmd")
+library(here)
+source(here("_common.R"))
+```
+
+```{r set-pkg, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rstatix)
+library(ggpubr)
+```
+
+**References:**
+
+-   [Wilcoxon test in R](https://www.datanovia.com/en/lessons/wilcoxon-test-in-r/): data novia
+
+-   [Wilcoxon test](https://statsandr.com/blog/wilcoxon-test-in-r-how-to-compare-2-groups-under-the-non-normality-assumption/): stats and R
+
+## Introduction
+
+-   The Wilcoxon test is a non-parametric test for comparing 2 groups
+
+-   Less powerful than t-test, i.e., more likely to fail to reject the $H_0$ that there is no difference.
+
+::: callout-tips
+#### When to use
+
+Data is not normally distributed *and* the sample size is small (n < 30) (so that central limit theorem not applied)
+:::
+
+## Wilcoxon signed rank test on paired samples
+
+### Data
+
+```{r}
+# Wide format
+data("mice2", package = "datarium")
+head(mice2, 3)
+```
+
+Transform to long
+
+```{r}
+mice2.long <- mice2 %>%
+  gather(key = "group", value = "weight", before, after)
+
+head(mice2.long, 3)
+```
+
+### Summary Stats
+
+```{r}
+mice2.long %>%
+  group_by(group) %>%
+  get_summary_stats(weight, type = "median_iqr")
+```
+
+```{r}
+ggpaired(mice2.long, x = "group", y = "weight", 
+         order = c("before", "after"),
+         ylab = "Weight", xlab = "Groups")
+```
+
+The test assumes that differences between paired samples should be distributed symmetrically around the median.
+
+```{r}
+mice2d <- mice2 %>% 
+  mutate(differences = after - before)
+
+gghistogram(mice2d, x = "differences", y = "..density..", 
+            fill = "steelblue",bins = 5, add_density = TRUE)
+```
+
+### Computation
+
+```{r}
+wilcox.test(weight ~ group, data = mice2.long, paired = TRUE)
+```
+
+Or
+
+```{r}
+stat.test <- mice2.long  %>%
+  wilcox_test(weight ~ group, paired = TRUE) %>%
+  add_significance()
+
+stat.test
+```
+
+### Effect size
+
+```{r}
+mice2.long  %>%
+  wilcox_effsize(weight ~ group, paired = TRUE)
+```
+
+### Viz `ggplot2`
+
+```{r}
+mice2.long %>% 
+  ggplot(aes(group, weight, color = group, fill = group)) +
+  geom_boxplot(alpha = 0.4) +
+  geom_jitter() +
+  ggpubr::stat_compare_means(method = "wilcox.test",
+                             paired = TRUE, 
+                             label.x = 1.5, 
+                             label.y = 450, 
+                             show.legend = F)
+```
+
+
+### Viz: `{ggstatsplot}`
+
+
+```{r warning=FALSE, message=FALSE}
+library(ggstatsplot)
+```
+
+```{r}
+set.seed(123) # Seed for bootstraped CI
+
+ggwithinstats( # paired samples
+  data = mice2.long,
+  x = group,
+  y = weight,
+  type = "nonparametric", # for wilcoxon
+  centrality.plotting = FALSE # remove median
+)
+```

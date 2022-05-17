@@ -105,6 +105,27 @@
     "text": "Confidence Interval\n\n# generate a distribution like the null distribution, \n# though exclude the null hypothesis from the pipeline\nboot_dist <- gss %>%\n  specify(response = hours) %>%\n  generate(reps = 1000, type = \"bootstrap\") %>%\n  calculate(stat = \"mean\")\n\n# start with the bootstrap distribution\nci <- boot_dist %>%\n  # calculate the confidence interval around the point estimate\n  get_confidence_interval(point_estimate = obs_mean,\n                          # at the 95% confidence level\n                          level = .95,\n                          # using the standard error\n                          type = \"se\")\n\nci\n#> # A tibble: 1 × 2\n#>   lower_ci upper_ci\n#>      <dbl>    <dbl>\n#> 1     40.1     42.7\n\n\nboot_dist %>%\n  visualize() +\n  shade_confidence_interval(endpoints = ci)"
   },
   {
+    "objectID": "stats/wilcoxon.html",
+    "href": "stats/wilcoxon.html",
+    "title": "Wilcoxon Test",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(rstatix)\nlibrary(ggpubr)\nReferences:"
+  },
+  {
+    "objectID": "stats/wilcoxon.html#introduction",
+    "href": "stats/wilcoxon.html#introduction",
+    "title": "Wilcoxon Test",
+    "section": "Introduction",
+    "text": "Introduction\n\nThe Wilcoxon test is a non-parametric test for comparing 2 groups\nLess powerful than t-test, i.e., more likely to fail to reject the \\(H_0\\) that there is no difference.\n\n\n\n\n\n\n\nWhen to use\n\n\n\nData is not normally distributed and the sample size is small (n < 30) (so that central limit theorem not applied)"
+  },
+  {
+    "objectID": "stats/wilcoxon.html#wilcoxon-signed-rank-test-on-paired-samples",
+    "href": "stats/wilcoxon.html#wilcoxon-signed-rank-test-on-paired-samples",
+    "title": "Wilcoxon Test",
+    "section": "Wilcoxon signed rank test on paired samples",
+    "text": "Wilcoxon signed rank test on paired samples\n\nData\n\n# Wide format\ndata(\"mice2\", package = \"datarium\")\nhead(mice2, 3)\n#>   id before after\n#> 1  1  187.2 429.5\n#> 2  2  194.2 404.4\n#> 3  3  231.7 405.6\n\nTransform to long\n\nmice2.long <- mice2 %>%\n  gather(key = \"group\", value = \"weight\", before, after)\n\nhead(mice2.long, 3)\n#>   id  group weight\n#> 1  1 before  187.2\n#> 2  2 before  194.2\n#> 3  3 before  231.7\n\n\n\nSummary Stats\n\nmice2.long %>%\n  group_by(group) %>%\n  get_summary_stats(weight, type = \"median_iqr\")\n#> # A tibble: 2 × 5\n#>   group  variable     n median   iqr\n#>   <chr>  <chr>    <dbl>  <dbl> <dbl>\n#> 1 after  weight      10   405   28.3\n#> 2 before weight      10   197.  19.2\n\n\nggpaired(mice2.long, x = \"group\", y = \"weight\", \n         order = c(\"before\", \"after\"),\n         ylab = \"Weight\", xlab = \"Groups\")\n\n\n\n\nThe test assumes that differences between paired samples should be distributed symmetrically around the median.\n\nmice2d <- mice2 %>% \n  mutate(differences = after - before)\n\ngghistogram(mice2d, x = \"differences\", y = \"..density..\", \n            fill = \"steelblue\",bins = 5, add_density = TRUE)\n\n\n\n\n\n\nComputation\n\nwilcox.test(weight ~ group, data = mice2.long, paired = TRUE)\n#> \n#>  Wilcoxon signed rank exact test\n#> \n#> data:  weight by group\n#> V = 55, p-value = 0.001953\n#> alternative hypothesis: true location shift is not equal to 0\n\nOr\n\nstat.test <- mice2.long  %>%\n  wilcox_test(weight ~ group, paired = TRUE) %>%\n  add_significance()\n\nstat.test\n#> # A tibble: 1 × 8\n#>   .y.    group1 group2    n1    n2 statistic       p p.signif\n#> * <chr>  <chr>  <chr>  <int> <int>     <dbl>   <dbl> <chr>   \n#> 1 weight after  before    10    10        55 0.00195 **\n\n\n\nEffect size\n\nmice2.long  %>%\n  wilcox_effsize(weight ~ group, paired = TRUE)\n#> # A tibble: 1 × 7\n#>   .y.    group1 group2 effsize    n1    n2 magnitude\n#> * <chr>  <chr>  <chr>    <dbl> <int> <int> <ord>    \n#> 1 weight after  before   0.886    10    10 large\n\n\n\nViz ggplot2\n\nmice2.long %>% \n  ggplot(aes(group, weight, color = group, fill = group)) +\n  geom_boxplot(alpha = 0.4) +\n  geom_jitter() +\n  ggpubr::stat_compare_means(method = \"wilcox.test\",\n                             paired = TRUE, \n                             label.x = 1.5, \n                             label.y = 450, \n                             show.legend = F)\n\n\n\n\n\n\nViz: {ggstatsplot}\n\nlibrary(ggstatsplot)\n\n\nset.seed(123) # Seed for bootstraped CI\n\nggwithinstats( # paired samples\n  data = mice2.long,\n  x = group,\n  y = weight,\n  type = \"nonparametric\", # for wilcoxon\n  centrality.plotting = FALSE # remove median\n)"
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
     "title": "Summary",

@@ -13,6 +13,9 @@ book:
       chapters:
       - "stats/normality-test.qmd"
       - "stats/infer.qmd"
+    - part: "Compare group"
+      chapters:
+      - "stats/wilcoxon.qmd"
     - summary.qmd
     - references.qmd
 
