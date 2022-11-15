@@ -152,5 +152,12 @@
     "title": "Summary",
     "section": "",
     "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "stats/dta.html#roc-curve",
+    "href": "stats/dta.html#roc-curve",
+    "title": "Diagnosis Accuracy",
+    "section": "ROC Curve",
+    "text": "ROC Curve\n\nr1 <- roc(Survived_orig ~ Fare, data = titanic_sub)\n\nSetting levels: control = Lived, case = Died\n\n\nSetting direction: controls > cases\n\nr1\n\n\nCall:\nroc.formula(formula = Survived_orig ~ Fare, data = titanic_sub)\n\nData: Fare in 342 controls (Survived_orig Lived) > 549 cases (Survived_orig Died).\nArea under the curve: 0.6921\n\n\n\n# AUC\n(auc <- auc(r1))\n\nArea under the curve: 0.6921\n\n# Confidence Interval\n(ci <- ci.auc(r1))\n\n95% CI: 0.6567-0.7276 (DeLong)\n\nci_l <- round(ci[1], 2) # Lower\nci_u <- round(ci[3], 2) # Upper\n\n\nhead(r1$thresholds)\n\n[1]      Inf 387.6646 262.6875 254.9479 237.5229 224.6521\n\n\n\nPlot (Base R)\n\nplot(r1, type = \"S\")\n\n\n\n\n\n\nPlot (ggplot2)\n\nlegend_text <- paste0(\n    \"AUC = \", round(auc, 2), \" (95% CI = \", ci_l, \" - \", ci_u, \")\"\n)\n\n\nggroc(r1)+ \n  ggtitle(\"Receiver Operating Characteristic Curve\") +\n  geom_segment(\n    aes(x = 1, xend = 0, y = 0, yend = 1), color = \"grey\", \n    linetype = \"dashed\" ) +\n  scale_y_continuous(expand = c(0, 0)) + \n  scale_x_reverse(expand = c(0, 0)) + \n  annotate(\"text\", x = 0.3, y = 0.05, label = legend_text)\n\nScale for 'x' is already present. Adding another scale for 'x', which will\nreplace the existing scale."
   }
 ]

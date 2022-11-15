@@ -94,3 +94,56 @@ tp / (tp + fp)
 tn / (tn + fn)
 ```
 
+## ROC Curve
+
+
+```{r}
+r1 <- roc(Survived_orig ~ Fare, data = titanic_sub)
+r1
+```
+
+```{r}
+# AUC
+(auc <- auc(r1))
+
+# Confidence Interval
+(ci <- ci.auc(r1))
+
+ci_l <- round(ci[1], 2) # Lower
+ci_u <- round(ci[3], 2) # Upper
+```
+
+
+```{r}
+head(r1$thresholds)
+```
+
+### Plot (Base R)
+
+
+```{r}
+plot(r1, type = "S")
+```
+
+
+### Plot (ggplot2)
+
+
+```{r}
+legend_text <- paste0(
+    "AUC = ", round(auc, 2), " (95% CI = ", ci_l, " - ", ci_u, ")"
+)
+```
+
+
+```{r}
+ggroc(r1)+ 
+  ggtitle("Receiver Operating Characteristic Curve") +
+  geom_segment(
+    aes(x = 1, xend = 0, y = 0, yend = 1), color = "grey", 
+    linetype = "dashed" ) +
+  scale_y_continuous(expand = c(0, 0)) + 
+  scale_x_reverse(expand = c(0, 0)) + 
+  annotate("text", x = 0.3, y = 0.05, label = legend_text)
+```
+
