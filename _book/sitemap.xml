@@ -2,26 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/index.html</loc>
-    <lastmod>2022-05-17T13:47:07.294Z</lastmod>
+    <lastmod>2022-11-15T09:43:07.761Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/normality-test.html</loc>
-    <lastmod>2022-05-17T13:47:06.336Z</lastmod>
+    <lastmod>2022-11-15T09:43:05.301Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/infer.html</loc>
-    <lastmod>2022-05-17T13:47:06.339Z</lastmod>
+    <lastmod>2022-11-15T09:43:05.304Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/wilcoxon.html</loc>
-    <lastmod>2022-05-17T13:47:13.376Z</lastmod>
+    <lastmod>2022-11-15T09:43:05.305Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/stats/dta.html</loc>
+    <lastmod>2022-11-15T09:43:55.759Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/summary.html</loc>
-    <lastmod>2022-05-17T13:47:06.343Z</lastmod>
+    <lastmod>2022-11-15T09:43:05.308Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/references.html</loc>
-    <lastmod>2022-05-17T13:47:06.343Z</lastmod>
+    <lastmod>2022-11-15T09:43:05.309Z</lastmod>
   </url>
 </urlset>

@@ -126,6 +126,27 @@
     "text": "Wilcoxon signed rank test on paired samples\n\nData\n\n# Wide format\ndata(\"mice2\", package = \"datarium\")\nhead(mice2, 3)\n#>   id before after\n#> 1  1  187.2 429.5\n#> 2  2  194.2 404.4\n#> 3  3  231.7 405.6\n\nTransform to long\n\nmice2.long <- mice2 %>%\n  gather(key = \"group\", value = \"weight\", before, after)\n\nhead(mice2.long, 3)\n#>   id  group weight\n#> 1  1 before  187.2\n#> 2  2 before  194.2\n#> 3  3 before  231.7\n\n\n\nSummary Stats\n\nmice2.long %>%\n  group_by(group) %>%\n  get_summary_stats(weight, type = \"median_iqr\")\n#> # A tibble: 2 × 5\n#>   group  variable     n median   iqr\n#>   <chr>  <chr>    <dbl>  <dbl> <dbl>\n#> 1 after  weight      10   405   28.3\n#> 2 before weight      10   197.  19.2\n\n\nggpaired(mice2.long, x = \"group\", y = \"weight\", \n         order = c(\"before\", \"after\"),\n         ylab = \"Weight\", xlab = \"Groups\")\n\n\n\n\nThe test assumes that differences between paired samples should be distributed symmetrically around the median.\n\nmice2d <- mice2 %>% \n  mutate(differences = after - before)\n\ngghistogram(mice2d, x = \"differences\", y = \"..density..\", \n            fill = \"steelblue\",bins = 5, add_density = TRUE)\n\n\n\n\n\n\nComputation\n\nwilcox.test(weight ~ group, data = mice2.long, paired = TRUE)\n#> \n#>  Wilcoxon signed rank exact test\n#> \n#> data:  weight by group\n#> V = 55, p-value = 0.001953\n#> alternative hypothesis: true location shift is not equal to 0\n\nOr\n\nstat.test <- mice2.long  %>%\n  wilcox_test(weight ~ group, paired = TRUE) %>%\n  add_significance()\n\nstat.test\n#> # A tibble: 1 × 8\n#>   .y.    group1 group2    n1    n2 statistic       p p.signif\n#> * <chr>  <chr>  <chr>  <int> <int>     <dbl>   <dbl> <chr>   \n#> 1 weight after  before    10    10        55 0.00195 **\n\n\n\nEffect size\n\nmice2.long  %>%\n  wilcox_effsize(weight ~ group, paired = TRUE)\n#> # A tibble: 1 × 7\n#>   .y.    group1 group2 effsize    n1    n2 magnitude\n#> * <chr>  <chr>  <chr>    <dbl> <int> <int> <ord>    \n#> 1 weight after  before   0.886    10    10 large\n\n\n\nViz ggplot2\n\nmice2.long %>% \n  ggplot(aes(group, weight, color = group, fill = group)) +\n  geom_boxplot(alpha = 0.4) +\n  geom_jitter() +\n  ggpubr::stat_compare_means(method = \"wilcox.test\",\n                             paired = TRUE, \n                             label.x = 1.5, \n                             label.y = 450, \n                             show.legend = F)\n\n\n\n\n\n\nViz: {ggstatsplot}\n\nlibrary(ggstatsplot)\n\n\nset.seed(123) # Seed for bootstraped CI\n\nggwithinstats( # paired samples\n  data = mice2.long,\n  x = group,\n  y = weight,\n  type = \"nonparametric\", # for wilcoxon\n  centrality.plotting = FALSE # remove median\n)"
   },
   {
+    "objectID": "stats/dta.html",
+    "href": "stats/dta.html",
+    "title": "Diagnosis Accuracy",
+    "section": "",
+    "text": "Adaped from: Link"
+  },
+  {
+    "objectID": "stats/dta.html#survived-vs-fare-any-difference",
+    "href": "stats/dta.html#survived-vs-fare-any-difference",
+    "title": "Diagnosis Accuracy",
+    "section": "Survived vs Fare: Any difference ?",
+    "text": "Survived vs Fare: Any difference ?\nLet’s ask the following question: were those people who paid more for their ticket more likely to survive?\n\nggstatsplot::ggbetweenstats(\n  titanic_train,\n  x = Survived,\n  y = Fare\n)\n\n\n\n\nConfirm the difference in Fare between 2 groups.\n\nwilcox.test(titanic_train$Fare ~ titanic_train$Survived)\n\n\n    Wilcoxon rank sum test with continuity correction\n\ndata:  titanic_train$Fare by titanic_train$Survived\nW = 57806, p-value < 2.2e-16\nalternative hypothesis: true location shift is not equal to 0"
+  },
+  {
+    "objectID": "stats/dta.html#dta-manual-way",
+    "href": "stats/dta.html#dta-manual-way",
+    "title": "Diagnosis Accuracy",
+    "section": "DTA (Manual Way)",
+    "text": "DTA (Manual Way)\nNow let’s ask a slightly different question: can a passenger’s fare price be used to predict where or not they survived?\n\nPrep Data\n\ntitanic_sub <- titanic_train |> \n  select(Fare, Survived) |> \n  mutate(Survived_orig = ifelse(Survived == 1L, \"Lived\", \"Died\")) |> \n  mutate(Survived_pred = ifelse(Fare > 14.45, \"Lived\", \"Died\")) |> \n  mutate(across(starts_with(\"Survived_\"), \n                ~factor(.x, levels = c(\"Lived\", \"Died\"))))\n\nhead(titanic_sub)\n\n     Fare Survived Survived_orig Survived_pred\n1  7.2500        0          Died          Died\n2 71.2833        1         Lived         Lived\n3  7.9250        1         Lived          Died\n4 53.1000        1         Lived         Lived\n5  8.0500        0          Died          Died\n6  8.4583        0          Died          Died\n\n\n\n\nConfusion Matrix\n\ncm <- table(pred = titanic_sub$Survived_pred, \n      orig = titanic_sub$Survived_orig)\n\ncm\n\n       orig\npred    Lived Died\n  Lived   231  220\n  Died    111  329\n\n\n\n\nDiagnostic Accuracy\n\n# True Positive\n(tp <- cm[1, 1])\n\n[1] 231\n\n# False Positive\n(fp <- cm[1, 2])\n\n[1] 220\n\n# False Negative\n(fn <- cm[2, 1])\n\n[1] 111\n\n# True Negative\n(tn <- cm[2, 2])\n\n[1] 329\n\n\n\n# Sense\ntp / (tp + fn)\n\n[1] 0.6754386\n\n# Spec\ntn / (tn + fp)\n\n[1] 0.5992714\n\n# PPV\ntp / (tp + fp)\n\n[1] 0.5121951\n\n# NPV\ntn / (tn + fn)\n\n[1] 0.7477273"
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
     "title": "Summary",

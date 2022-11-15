@@ -1,0 +1,96 @@
+---
+title: "Diagnosis Accuracy"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/dta.qmd")
+library(here)
+library(tidyverse)
+library(titanic)
+library(pROC)
+```
+
+
+Adaped from: [Link](https://rowannicholls.github.io/R/statistics/tutorial.html#data-manipulation)
+
+```{r}
+names(titanic_train)
+```
+
+
+```{r}
+skimr::skim(titanic_train)
+```
+
+
+## Survived vs Fare: Any difference ?
+
+Let’s ask the following question: were those people who paid more for their ticket more likely to survive? 
+
+```{r}
+ggstatsplot::ggbetweenstats(
+  titanic_train,
+  x = Survived,
+  y = Fare
+)
+```
+
+
+Confirm the difference in `Fare` between 2 groups.
+
+```{r}
+wilcox.test(titanic_train$Fare ~ titanic_train$Survived)
+```
+
+## DTA (Manual Way)
+
+Now let’s ask a slightly different question: can a passenger’s fare price be used to predict where or not they survived?
+
+### Prep Data
+
+```{r}
+titanic_sub <- titanic_train |> 
+  select(Fare, Survived) |> 
+  mutate(Survived_orig = ifelse(Survived == 1L, "Lived", "Died")) |> 
+  mutate(Survived_pred = ifelse(Fare > 14.45, "Lived", "Died")) |> 
+  mutate(across(starts_with("Survived_"), 
+                ~factor(.x, levels = c("Lived", "Died"))))
+
+head(titanic_sub)
+```
+
+### Confusion Matrix
+
+```{r}
+cm <- table(pred = titanic_sub$Survived_pred, 
+      orig = titanic_sub$Survived_orig)
+
+cm
+```
+
+### Diagnostic Accuracy
+
+```{r}
+# True Positive
+(tp <- cm[1, 1])
+# False Positive
+(fp <- cm[1, 2])
+# False Negative
+(fn <- cm[2, 1])
+# True Negative
+(tn <- cm[2, 2])
+```
+
+
+```{r}
+# Sense
+tp / (tp + fn)
+# Spec
+tn / (tn + fp)
+# PPV
+tp / (tp + fp)
+# NPV
+tn / (tn + fn)
+```
+
