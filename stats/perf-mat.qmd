@@ -1,0 +1,112 @@
+---
+title: "Multi-class Performance Matrix"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/perf-mat.qmd")
+library(here)
+library(dplyr)
+library(tidymodels)
+```
+
+[Multiclass AVG](https://yardstick.tidymodels.org/articles/multiclass.html)
+
+## Pre-processing
+
+```{r}
+set.seed(1)
+iris_split <- initial_split(iris, prop = 0.7, strata = Species)
+iris_tr <- training(iris_split)
+iris_tst <- testing(iris_split)
+```
+
+Recipes
+
+```{r}
+iris_rec <- recipe(Species ~ ., data = iris) 
+```
+
+Model Spec
+
+```{r multinom_sim}
+multinom_sim <- multinom_reg(engine = "nnet")
+```
+
+Workflow
+
+```{r}
+iris_wf <- workflow(iris_rec, multinom_sim)
+```
+
+## Fit & Predict
+
+Fit Model
+
+```{r}
+iris_fit <- fit(iris_wf, data = iris_tr)
+iris_fit
+```
+
+Predict
+
+```{r}
+iris_res <- broom::augment(iris_fit, new_data = iris_tst)
+head(iris_res)
+```
+
+## Multi-class Performace Matrix
+
+### Confusion Matrix
+
+```{r}
+conf_mat(iris_res, truth = Species, estimate = .pred_class)
+```
+
+Count number of observed class
+
+```{r}
+class_totals <- iris_res |> 
+  count(Species, name = "totals") %>% 
+  mutate(class_wts = totals / sum(totals))
+
+class_totals
+```
+
+```{r}
+cell_counts <- 
+  iris_res %>% 
+  group_by(Species, .pred_class) %>% 
+  count() %>% 
+  ungroup()
+
+cell_counts
+```
+
+```{r}
+# Compute the four sensitivities using 1-vs-all
+one_versus_all <- 
+  cell_counts %>% 
+  filter(Species == .pred_class) %>% 
+  full_join(class_totals, by = "Species") %>% 
+  mutate(sens = n / totals)
+
+one_versus_all
+```
+
+```{r}
+# Three different estimates:
+one_versus_all %>% 
+  summarize(
+    macro = mean(sens), 
+    macro_wts = weighted.mean(sens, class_wts),
+    micro = sum(n) / sum(totals)
+  )
+```
+
+-   **Macro-averaging:** computes a set of one-versus-all metrics using the standard two-class statistics. These are averaged.
+-   **Macro-weighted averaging:** does the same but the average is weighted by the number of samples in each class.
+-   **Micro-averaging:** computes the contribution for each class, aggregates them, then computes a single metric from the aggregates.
+
+
+![Multiclass Doodles](/pic/multiclass-doodle.jpg){fig-align="center"}

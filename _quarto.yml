@@ -19,6 +19,9 @@ book:
     - part: "Diagnostic Study"
       chapters:
       - "stats/dta.qmd"
+    - part: "ML"
+      chapters: 
+      - "stats/perf-mat.qmd"
     - summary.qmd
     - references.qmd
 
