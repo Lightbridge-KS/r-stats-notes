@@ -5,12 +5,16 @@ title: "Tidymodels Overview"
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 here::i_am("ml/tidymod-overview.qmd")
+```
+
+```{r load-pkg, message=FALSE, warning=FALSE}
 library(here)
 library(tidyverse)
 library(tidymodels)
 
 tidymodels_prefer()
 ```
+
 
 ```{r}
 pen <- penguins |> 
