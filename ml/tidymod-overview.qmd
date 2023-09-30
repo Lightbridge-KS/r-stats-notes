@@ -1,0 +1,231 @@
+---
+title: "Tidymodels Overview"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("ml/tidymod-overview.qmd")
+library(here)
+library(tidyverse)
+library(tidymodels)
+
+tidymodels_prefer()
+```
+
+```{r}
+pen <- penguins |> 
+  select(!c(island, bill_length_mm))
+```
+
+
+## Explore Data
+
+Outcome: `species`
+
+```{r}
+glimpse(pen)
+```
+
+
+```{r fig-plot-pen}
+pen |>
+  filter(!is.na(sex)) |>
+  ggplot(aes(x     = flipper_length_mm,
+             y     = bill_depth_mm,
+             color = species,
+             size  = body_mass_g)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~sex)
+```
+
+```{r}
+pen |> 
+  count(species)
+```
+
+Complete record rate:
+
+```{r}
+vapply(pen, function(x) mean(!is.na(x)), numeric(1))
+```
+
+
+## Data Budget
+
+### Split Data
+
+```{r}
+set.seed(123)
+pen_split <- initial_split(pen, prop = 0.8, strata = species)
+pen_split
+
+pen_train <- training(pen_split)
+pen_test <- testing(pen_split)
+```
+
+### Resample
+
+10-folded CV, repeated 2 times from the training data
+
+```{r pen_folds}
+set.seed(123)
+pen_folds <- vfold_cv(pen_train, v = 10)
+
+head(pen_folds)
+```
+
+## Recipes
+
+```{r pen_rec_base}
+pen_rec_base <- recipe(species ~ ., data = pen_train) 
+pen_rec_base
+```
+
+## Model Spec
+
+```{r mspec_cls}
+mspec_cls <- list(
+  multi_nnet = multinom_reg(engine = "nnet"),
+  multi_glmnet_lasso = multinom_reg(engine = "glmnet", 
+                                    penalty = 0.1, mixture = 1)
+)
+
+map(mspec_cls, translate)
+```
+## Workflow
+
+### Single
+
+```{r}
+workflow(preprocessor = pen_rec_base, spec = mspec_cls$multi_nnet)
+```
+
+### Combinations
+
+```{r}
+pen_wfset <- workflow_set(
+  preproc = list(base = pen_rec_base),
+  models = mspec_cls
+)
+
+pen_wfset
+```
+
+```{r}
+pen_wf_base <- extract_workflow(pen_wfset, id = "base_multi_nnet")
+pen_wf_base
+```
+
+## Other Spec
+
+### Performance Matric Spec
+
+A function factory
+
+```{r}
+met_set_class <- metric_set(
+  accuracy, sensitivity, specificity,
+  mcc # Matthews correlation coefficient
+)
+
+met_set_mix <- metric_set(roc_auc, accuracy, sensitivity, specificity)
+```
+
+### Resamples Control
+
+```{r}
+keep_pred <- control_resamples(save_pred = TRUE, save_workflow = TRUE)
+```
+
+
+## Fit
+
+### Using: Test Data
+
+```{r pen_fit_base}
+pen_fit_base <- fit(pen_wf_base, data = pen_test)
+pen_fit_base
+```
+### Using: Resamples
+
+```{r pen_fit_fold_base}
+#| cache: true
+pen_fit_fold_base <- fit_resamples(pen_wf_base, 
+                                   resamples = pen_folds,
+                                   metrics = met_set_mix,
+                                   control = keep_pred)
+head(pen_fit_fold_base)
+```
+
+## Evaluate & Predict
+
+### Using: Test set
+
+#### Predict
+
+```{r}
+pen_res_base <- broom::augment(pen_fit_base, new_data = pen_test)
+glimpse(pen_res_base)
+```
+
+#### Metric
+
+```{r}
+met_set_class(pen_res_base, 
+              truth = species, 
+              estimate = .pred_class,
+              estimator = "macro" # Macro AVG
+              )
+```
+
+#### ROC
+
+```{r}
+roc_curve(pen_res_base, truth = species, 
+          .pred_Adelie, .pred_Chinstrap, .pred_Gentoo) |> 
+  autoplot()
+```
+
+Gentoo curve is on the top-left see [@fig-plot-pen] for reason.
+
+```{r}
+roc_auc(pen_res_base, truth = species, 
+        .pred_Adelie, .pred_Chinstrap, .pred_Gentoo)
+```
+
+### Using Resamples
+
+#### Metric
+
+```{r}
+collect_metrics(pen_fit_fold_base)
+```
+These are the resampling estimates averaged over the individual replicates. To get the metrics for each resample, use the option `summarize = FALSE`.
+
+#### Predictions
+
+**Assessment set predictions:**
+
+```{r}
+pen_assess_base <- collect_predictions(pen_fit_fold_base, summarize = FALSE)
+head(pen_assess_base)
+```
+
+
+`.row` column is an integer that matches the row of the original training set so that these results can be properly arranged and joined with the original data.
+
+**Averaged Predictions:**
+
+```{r}
+collect_predictions(pen_fit_fold_base, summarize = T) |> head()
+```
+
+#### ROC
+
+```{r}
+pen_assess_base |> 
+  group_by(id) |> 
+  roc_curve(truth = species, .pred_Adelie, .pred_Chinstrap, .pred_Gentoo) |> 
+  autoplot()
+```
+

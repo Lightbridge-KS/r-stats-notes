@@ -21,6 +21,7 @@ book:
       - "stats/dta.qmd"
     - part: "ML"
       chapters: 
+      - "ml/tidymod-overview.qmd"
       - "stats/perf-mat.qmd"
     - summary.qmd
     - references.qmd
