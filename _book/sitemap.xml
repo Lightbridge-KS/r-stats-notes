@@ -2,38 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/index.html</loc>
-    <lastmod>2023-09-30T16:36:08.631Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.522Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/normality-test.html</loc>
-    <lastmod>2023-09-30T16:36:08.642Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.536Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/infer.html</loc>
-    <lastmod>2023-09-30T16:36:08.664Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.558Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/wilcoxon.html</loc>
-    <lastmod>2023-09-30T16:36:08.679Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.576Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/dta.html</loc>
-    <lastmod>2023-09-30T16:36:08.697Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.597Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/tidymod-overview.html</loc>
-    <lastmod>2023-09-30T16:40:09.428Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.622Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/compare-mod.html</loc>
+    <lastmod>2023-10-10T12:17:01.634Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/tune-mod.html</loc>
+    <lastmod>2023-10-10T12:17:01.649Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/perf-mat.html</loc>
-    <lastmod>2023-09-30T16:36:08.726Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.660Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/summary.html</loc>
-    <lastmod>2023-09-30T16:36:08.730Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.669Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/references.html</loc>
-    <lastmod>2023-09-30T16:36:08.733Z</lastmod>
+    <lastmod>2023-10-10T12:17:01.674Z</lastmod>
   </url>
 </urlset>

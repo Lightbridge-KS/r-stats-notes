@@ -1,0 +1,109 @@
+---
+title: "Comparing Models"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("ml/compare-mod.qmd")
+```
+
+```{r load-pkg, message=FALSE, warning=FALSE}
+library(here)
+library(tidyverse)
+library(tidymodels)
+
+tidymodels_prefer()
+```
+
+
+[Compare model with resampling](https://www.tmwr.org/compare)
+
+## Data
+
+```{r}
+data(ames)
+ames <- ames %>% mutate(Sale_Price = log10(Sale_Price))
+
+set.seed(502)
+ames_split <- initial_split(ames, prop = 0.80, strata = Sale_Price)
+ames_train <- training(ames_split)
+ames_test  <-  testing(ames_split)
+
+ames_folds <- vfold_cv(ames_train, v = 10)
+```
+
+
+## Recipes
+
+```{r}
+basic_rec <- 
+  recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type + 
+           Latitude + Longitude, data = ames_train) %>%
+  step_log(Gr_Liv_Area, base = 10) %>% 
+  step_other(Neighborhood, threshold = 0.01) %>% 
+  step_dummy(all_nominal_predictors())
+
+interaction_rec <- 
+  basic_rec %>% 
+  step_interact( ~ Gr_Liv_Area:starts_with("Bldg_Type_") ) 
+
+spline_rec <- 
+  interaction_rec %>% 
+  step_ns(Latitude, Longitude, deg_free = 50)
+
+# List of Recipes 
+preproc <- 
+  list(basic = basic_rec, 
+       interact = interaction_rec, 
+       splines = spline_rec
+  )
+```
+
+## Models
+
+```{r}
+mspecs <- list(
+  lm = linear_reg()
+)
+
+class(mspecs$lm)
+```
+
+
+## Workflows
+
+```{r}
+lm_models <- workflow_set(preproc, mspecs, cross = FALSE)
+class(lm_models)
+lm_models
+```
+
+## Fit Workflows
+
+
+```{r}
+lm_wfs <- 
+  lm_models %>% 
+  workflow_map("fit_resamples", 
+               # Options to `workflow_map()`: 
+               seed = 1101, verbose = TRUE,
+               # Options to `fit_resamples()`: 
+               resamples = ames_folds, 
+               control = control_resamples(save_pred = T))
+
+
+class(lm_wfs)
+lm_wfs
+```
+
+## Metric
+
+Metric for each workflows
+
+```{r}
+lm_wfs_metrics <- collect_metrics(lm_wfs)
+lm_wfs_metrics
+```
+
+
+

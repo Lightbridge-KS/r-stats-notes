@@ -22,6 +22,8 @@ book:
     - part: "ML"
       chapters: 
       - "ml/tidymod-overview.qmd"
+      - "ml/compare-mod.qmd"
+      - "ml/tune-mod.qmd"
       - "stats/perf-mat.qmd"
     - summary.qmd
     - references.qmd

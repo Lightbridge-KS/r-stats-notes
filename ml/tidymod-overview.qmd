@@ -152,6 +152,13 @@ pen_fit_base
 ```
 ### Using: Resamples
 
+```{r}
+# Unix and macOS only
+library(doMC)
+registerDoMC(cores = 4)
+```
+
+
 ```{r pen_fit_fold_base}
 #| cache: true
 pen_fit_fold_base <- fit_resamples(pen_wf_base, 
@@ -232,4 +239,6 @@ pen_assess_base |>
   roc_curve(truth = species, .pred_Adelie, .pred_Chinstrap, .pred_Gentoo) |> 
   autoplot()
 ```
+
+
 

@@ -172,7 +172,7 @@
     "href": "ml/tidymod-overview.html#fit",
     "title": "Tidymodels Overview",
     "section": "Fit",
-    "text": "Fit\n\nUsing: Test Data\n\npen_fit_base &lt;- fit(pen_wf_base, data = pen_test)\npen_fit_base\n\n══ Workflow [trained] ══════════════════════════════════════════════════════════\nPreprocessor: Recipe\nModel: multinom_reg()\n\n── Preprocessor ────────────────────────────────────────────────────────────────\n0 Recipe Steps\n\n── Model ───────────────────────────────────────────────────────────────────────\nCall:\nnnet::multinom(formula = ..y ~ ., data = data, trace = FALSE)\n\nCoefficients:\n          (Intercept) bill_depth_mm flipper_length_mm  body_mass_g   sexmale\nChinstrap -21.7033319     -0.555911         0.1906063 -0.001596491 0.7168018\nGentoo     -0.4884471     -6.002835         0.2447407  0.011754103 3.8349607\n\nResidual Deviance: 46.77568 \nAIC: 66.77568 \n\n\n\n\nUsing: Resamples\n\npen_fit_fold_base &lt;- fit_resamples(pen_wf_base, \n                                   resamples = pen_folds,\n                                   metrics = met_set_mix,\n                                   control = keep_pred)\nhead(pen_fit_fold_base)\n\n# A tibble: 6 × 5\n  splits           id     .metrics         .notes           .predictions     \n  &lt;list&gt;           &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;           &lt;list&gt;           \n1 &lt;split [246/28]&gt; Fold01 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n2 &lt;split [246/28]&gt; Fold02 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n3 &lt;split [246/28]&gt; Fold03 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n4 &lt;split [246/28]&gt; Fold04 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n5 &lt;split [247/27]&gt; Fold05 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [27 × 7]&gt;\n6 &lt;split [247/27]&gt; Fold06 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [27 × 7]&gt;"
+    "text": "Fit\n\nUsing: Test Data\n\npen_fit_base &lt;- fit(pen_wf_base, data = pen_test)\npen_fit_base\n\n══ Workflow [trained] ══════════════════════════════════════════════════════════\nPreprocessor: Recipe\nModel: multinom_reg()\n\n── Preprocessor ────────────────────────────────────────────────────────────────\n0 Recipe Steps\n\n── Model ───────────────────────────────────────────────────────────────────────\nCall:\nnnet::multinom(formula = ..y ~ ., data = data, trace = FALSE)\n\nCoefficients:\n          (Intercept) bill_depth_mm flipper_length_mm  body_mass_g   sexmale\nChinstrap -21.7033319     -0.555911         0.1906063 -0.001596491 0.7168018\nGentoo     -0.4884471     -6.002835         0.2447407  0.011754103 3.8349607\n\nResidual Deviance: 46.77568 \nAIC: 66.77568 \n\n\n\n\nUsing: Resamples\n\n# Unix and macOS only\nlibrary(doMC)\n\nLoading required package: foreach\n\n\n\nAttaching package: 'foreach'\n\n\nThe following objects are masked from 'package:purrr':\n\n    accumulate, when\n\n\nLoading required package: iterators\n\n\nLoading required package: parallel\n\nregisterDoMC(cores = 4)\n\n\npen_fit_fold_base &lt;- fit_resamples(pen_wf_base, \n                                   resamples = pen_folds,\n                                   metrics = met_set_mix,\n                                   control = keep_pred)\nhead(pen_fit_fold_base)\n\n# A tibble: 6 × 5\n  splits           id     .metrics         .notes           .predictions     \n  &lt;list&gt;           &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;           &lt;list&gt;           \n1 &lt;split [246/28]&gt; Fold01 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n2 &lt;split [246/28]&gt; Fold02 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n3 &lt;split [246/28]&gt; Fold03 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n4 &lt;split [246/28]&gt; Fold04 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [28 × 7]&gt;\n5 &lt;split [247/27]&gt; Fold05 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [27 × 7]&gt;\n6 &lt;split [247/27]&gt; Fold06 &lt;tibble [4 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [27 × 7]&gt;"
   },
   {
     "objectID": "ml/tidymod-overview.html#evaluate-predict",
@@ -180,6 +180,90 @@
     "title": "Tidymodels Overview",
     "section": "Evaluate & Predict",
     "text": "Evaluate & Predict\n\nUsing: Test set\n\nPredict\n\npen_res_base &lt;- broom::augment(pen_fit_base, new_data = pen_test)\nglimpse(pen_res_base)\n\nRows: 70\nColumns: 9\n$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…\n$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, 17.1, 20.7, 18.4, 17.9, 17.8, 21.1…\n$ flipper_length_mm &lt;int&gt; 181, 186, 195, 186, 197, 184, 187, 188, 196, 179, 19…\n$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, 3300, 4500, 3325, 3200, 3300, 4150…\n$ sex               &lt;fct&gt; male, female, female, NA, male, female, female, fema…\n$ .pred_class       &lt;fct&gt; Adelie, Adelie, Chinstrap, NA, Adelie, Adelie, Adeli…\n$ .pred_Adelie      &lt;dbl&gt; 0.9463005, 0.8797500, 0.4329285, NA, 0.8936564, 0.89…\n$ .pred_Chinstrap   &lt;dbl&gt; 0.05369946, 0.12024966, 0.56707149, NA, 0.10634361, …\n$ .pred_Gentoo      &lt;dbl&gt; 1.147426e-09, 3.454101e-07, 6.534172e-11, NA, 2.2390…\n\n\n\n\nMetric\n\nmet_set_class(pen_res_base, \n              truth = species, \n              estimate = .pred_class,\n              estimator = \"macro\" # Macro AVG\n              )\n\n# A tibble: 4 × 3\n  .metric     .estimator .estimate\n  &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n1 accuracy    multiclass     0.809\n2 sensitivity macro          0.727\n3 specificity macro          0.896\n4 mcc         multiclass     0.704\n\n\n\n\nROC\n\nroc_curve(pen_res_base, truth = species, \n          .pred_Adelie, .pred_Chinstrap, .pred_Gentoo) |&gt; \n  autoplot()\n\n\n\n\nGentoo curve is on the top-left see Figure 5.1 for reason.\n\nroc_auc(pen_res_base, truth = species, \n        .pred_Adelie, .pred_Chinstrap, .pred_Gentoo)\n\n# A tibble: 1 × 3\n  .metric .estimator .estimate\n  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n1 roc_auc hand_till      0.933\n\n\n\n\n\nUsing Resamples\n\nMetric\n\ncollect_metrics(pen_fit_fold_base)\n\n# A tibble: 4 × 6\n  .metric     .estimator  mean     n std_err .config             \n  &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n1 accuracy    multiclass 0.823    10  0.0227 Preprocessor1_Model1\n2 roc_auc     hand_till  0.918    10  0.0166 Preprocessor1_Model1\n3 sensitivity macro      0.753    10  0.0231 Preprocessor1_Model1\n4 specificity macro      0.904    10  0.0110 Preprocessor1_Model1\n\n\nThese are the resampling estimates averaged over the individual replicates. To get the metrics for each resample, use the option summarize = FALSE.\n\n\nPredictions\nAssessment set predictions:\n\npen_assess_base &lt;- collect_predictions(pen_fit_fold_base, summarize = FALSE)\nhead(pen_assess_base)\n\n# A tibble: 6 × 8\n  id     .pred_Adelie .pred_Chinstrap .pred_Gentoo  .row .pred_class species\n  &lt;chr&gt;         &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt; &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;  \n1 Fold01        0.792          0.208      4.02e-25    10 Adelie      Adelie \n2 Fold01        0.691          0.309      3.25e-18    17 Adelie      Adelie \n3 Fold01        0.982          0.0177     7.24e-12    19 Adelie      Adelie \n4 Fold01        0.979          0.0209     2.11e-22    22 Adelie      Adelie \n5 Fold01        0.846          0.154      4.46e-12    46 Adelie      Adelie \n6 Fold01        0.880          0.120      5.82e-14    51 Adelie      Adelie \n# ℹ 1 more variable: .config &lt;chr&gt;\n\n\n.row column is an integer that matches the row of the original training set so that these results can be properly arranged and joined with the original data.\nAveraged Predictions:\n\ncollect_predictions(pen_fit_fold_base, summarize = T) |&gt; head()\n\n# A tibble: 6 × 7\n   .row species .config    .pred_Adelie .pred_Chinstrap .pred_Gentoo .pred_class\n  &lt;int&gt; &lt;fct&gt;   &lt;chr&gt;             &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt; &lt;fct&gt;      \n1     1 Adelie  Preproces…      NaN            NaN        NaN        Adelie     \n2     2 Adelie  Preproces…        0.514          0.486      1.41e-17 Adelie     \n3     3 Adelie  Preproces…        0.874          0.126      8.77e-21 Adelie     \n4     4 Adelie  Preproces…        0.949          0.0509     1.53e-14 Adelie     \n5     5 Adelie  Preproces…        0.791          0.209      4.07e-13 Adelie     \n6     6 Adelie  Preproces…      NaN            NaN        NaN        Adelie     \n\n\n\n\nROC\n\npen_assess_base |&gt; \n  group_by(id) |&gt; \n  roc_curve(truth = species, .pred_Adelie, .pred_Chinstrap, .pred_Gentoo) |&gt; \n  autoplot()"
+  },
+  {
+    "objectID": "ml/compare-mod.html#data",
+    "href": "ml/compare-mod.html#data",
+    "title": "Comparing Models",
+    "section": "Data",
+    "text": "Data\n\ndata(ames)\names &lt;- ames %&gt;% mutate(Sale_Price = log10(Sale_Price))\n\nset.seed(502)\names_split &lt;- initial_split(ames, prop = 0.80, strata = Sale_Price)\names_train &lt;- training(ames_split)\names_test  &lt;-  testing(ames_split)\n\names_folds &lt;- vfold_cv(ames_train, v = 10)"
+  },
+  {
+    "objectID": "ml/compare-mod.html#recipes",
+    "href": "ml/compare-mod.html#recipes",
+    "title": "Comparing Models",
+    "section": "Recipes",
+    "text": "Recipes\n\nbasic_rec &lt;- \n  recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type + \n           Latitude + Longitude, data = ames_train) %&gt;%\n  step_log(Gr_Liv_Area, base = 10) %&gt;% \n  step_other(Neighborhood, threshold = 0.01) %&gt;% \n  step_dummy(all_nominal_predictors())\n\ninteraction_rec &lt;- \n  basic_rec %&gt;% \n  step_interact( ~ Gr_Liv_Area:starts_with(\"Bldg_Type_\") ) \n\nspline_rec &lt;- \n  interaction_rec %&gt;% \n  step_ns(Latitude, Longitude, deg_free = 50)\n\n# List of Recipes \npreproc &lt;- \n  list(basic = basic_rec, \n       interact = interaction_rec, \n       splines = spline_rec\n  )"
+  },
+  {
+    "objectID": "ml/compare-mod.html#models",
+    "href": "ml/compare-mod.html#models",
+    "title": "Comparing Models",
+    "section": "Models",
+    "text": "Models\n\nmspecs &lt;- list(\n  lm = linear_reg()\n)\n\nclass(mspecs$lm)\n\n[1] \"linear_reg\" \"model_spec\""
+  },
+  {
+    "objectID": "ml/compare-mod.html#workflows",
+    "href": "ml/compare-mod.html#workflows",
+    "title": "Comparing Models",
+    "section": "Workflows",
+    "text": "Workflows\n\nlm_models &lt;- workflow_set(preproc, mspecs, cross = FALSE)\nclass(lm_models)\n\n[1] \"workflow_set\" \"tbl_df\"       \"tbl\"          \"data.frame\"  \n\nlm_models\n\n# A workflow set/tibble: 3 × 4\n  wflow_id    info             option    result    \n  &lt;chr&gt;       &lt;list&gt;           &lt;list&gt;    &lt;list&gt;    \n1 basic_lm    &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;\n2 interact_lm &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;\n3 splines_lm  &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;"
+  },
+  {
+    "objectID": "ml/compare-mod.html#fit-workflows",
+    "href": "ml/compare-mod.html#fit-workflows",
+    "title": "Comparing Models",
+    "section": "Fit Workflows",
+    "text": "Fit Workflows\n\nlm_wfs &lt;- \n  lm_models %&gt;% \n  workflow_map(\"fit_resamples\", \n               # Options to `workflow_map()`: \n               seed = 1101, verbose = TRUE,\n               # Options to `fit_resamples()`: \n               resamples = ames_folds, \n               control = control_resamples(save_pred = T))\n\ni 1 of 3 resampling: basic_lm\n\n\n✔ 1 of 3 resampling: basic_lm (1.8s)\n\n\ni 2 of 3 resampling: interact_lm\n\n\n✔ 2 of 3 resampling: interact_lm (1.8s)\n\n\ni 3 of 3 resampling: splines_lm\n\n\n✔ 3 of 3 resampling: splines_lm (3.2s)\n\nclass(lm_wfs)\n\n[1] \"workflow_set\" \"tbl_df\"       \"tbl\"          \"data.frame\"  \n\nlm_wfs\n\n# A workflow set/tibble: 3 × 4\n  wflow_id    info             option    result   \n  &lt;chr&gt;       &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   \n1 basic_lm    &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;\n2 interact_lm &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;\n3 splines_lm  &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;"
+  },
+  {
+    "objectID": "ml/compare-mod.html#metric",
+    "href": "ml/compare-mod.html#metric",
+    "title": "Comparing Models",
+    "section": "Metric",
+    "text": "Metric\nMetric for each workflows\n\nlm_wfs_metrics &lt;- collect_metrics(lm_wfs)\nlm_wfs_metrics\n\n# A tibble: 6 × 9\n  wflow_id    .config      preproc model .metric .estimator   mean     n std_err\n  &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;\n1 basic_lm    Preprocesso… recipe  line… rmse    standard   0.0804    10 0.00313\n2 basic_lm    Preprocesso… recipe  line… rsq     standard   0.793     10 0.0122 \n3 interact_lm Preprocesso… recipe  line… rmse    standard   0.0800    10 0.00301\n4 interact_lm Preprocesso… recipe  line… rsq     standard   0.795     10 0.0114 \n5 splines_lm  Preprocesso… recipe  line… rmse    standard   0.0786    10 0.00288\n6 splines_lm  Preprocesso… recipe  line… rsq     standard   0.802     10 0.0120"
+  },
+  {
+    "objectID": "ml/tune-mod.html#split",
+    "href": "ml/tune-mod.html#split",
+    "title": "Tune Models",
+    "section": "Split",
+    "text": "Split\n\names &lt;- make_ames()\n\nset.seed(4595)\ndata_split &lt;- initial_split(ames, strata = \"Sale_Price\")\n\names_train &lt;- training(data_split)\n\nset.seed(2453)\nrs_splits &lt;- vfold_cv(ames_train, strata = \"Sale_Price\")"
+  },
+  {
+    "objectID": "ml/tune-mod.html#recipes",
+    "href": "ml/tune-mod.html#recipes",
+    "title": "Tune Models",
+    "section": "Recipes",
+    "text": "Recipes\n\names_rec &lt;-\n  recipe(Sale_Price ~ ., data = ames_train) %&gt;%\n  step_log(Sale_Price, base = 10) %&gt;%\n  step_YeoJohnson(Lot_Area, Gr_Liv_Area) %&gt;%\n  step_other(Neighborhood, threshold = .1)  %&gt;%\n  step_dummy(all_nominal()) %&gt;%\n  step_zv(all_predictors()) %&gt;%\n  step_ns(Longitude, deg_free = tune(\"lon\")) %&gt;%\n  step_ns(Latitude, deg_free = tune(\"lat\"))"
+  },
+  {
+    "objectID": "ml/tune-mod.html#models",
+    "href": "ml/tune-mod.html#models",
+    "title": "Tune Models",
+    "section": "Models",
+    "text": "Models\n\nknn_model &lt;-\n  nearest_neighbor(\n    mode = \"regression\",\n    neighbors = tune(\"K\"),\n    weight_func = tune(),\n    dist_power = tune()\n  ) %&gt;%\n  set_engine(\"kknn\")"
+  },
+  {
+    "objectID": "ml/tune-mod.html#workflow-parameters",
+    "href": "ml/tune-mod.html#workflow-parameters",
+    "title": "Tune Models",
+    "section": "Workflow & Parameters",
+    "text": "Workflow & Parameters\n\names_wflow &lt;-\n  workflow() %&gt;%\n  add_recipe(ames_rec) %&gt;%\n  add_model(knn_model)\n\nclass(ames_wflow)\n\n[1] \"workflow\"\n\n\n\names_set &lt;-\n  extract_parameter_set_dials(ames_wflow) %&gt;%\n  update(K = neighbors(c(1, 50)))\n\nclass(ames_set)\n\n[1] \"parameters\" \"tbl_df\"     \"tbl\"        \"data.frame\"\n\names_set\n\nCollection of 5 parameters for tuning\n\n  identifier        type    object\n           K   neighbors nparam[+]\n weight_func weight_func dparam[+]\n  dist_power  dist_power nparam[+]\n         lon    deg_free nparam[+]\n         lat    deg_free nparam[+]"
+  },
+  {
+    "objectID": "ml/tune-mod.html#grid",
+    "href": "ml/tune-mod.html#grid",
+    "title": "Tune Models",
+    "section": "Grid",
+    "text": "Grid\n\nParameter Grids\n\nset.seed(7014)\n\n### Space-filling parameter grids\names_grid &lt;-\n  ames_set %&gt;%\n  grid_max_entropy(size = 10)\n\names_grid\n\n# A tibble: 10 × 5\n       K weight_func  dist_power   lon   lat\n   &lt;int&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;int&gt; &lt;int&gt;\n 1    35 optimal           1.32      8     1\n 2    35 rank              1.29      3    13\n 3    21 cos               0.626     1     4\n 4     4 biweight          0.311     8     4\n 5    32 triangular        0.165     9    15\n 6     3 rank              1.86     10    15\n 7    40 triangular        0.167    11     7\n 8    12 epanechnikov      1.53      4     7\n 9     5 rank              0.411     2     7\n10    33 triweight         0.511    10     3\n\n\n\n\nGrid Search !\n### Perform Grid Search (Not Run)\n\names_grid_search &lt;-\n  tune_grid(\n    ames_wflow,\n    resamples = rs_splits,\n    grid = ames_grid\n  )\n\ndata(\"example_ames_knn\")\nclass(ames_grid_search)\n\n[1] \"tune_results\" \"tbl_df\"       \"tbl\"          \"data.frame\"  \n\names_grid_search\n\n# Tuning results\n# 10-fold cross-validation using stratification \n# A tibble: 10 × 4\n   splits           id     .metrics          .notes          \n   &lt;list&gt;           &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;          \n 1 &lt;split [1978/0]&gt; Fold01 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 2 &lt;split [1979/0]&gt; Fold02 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 3 &lt;split [1979/0]&gt; Fold03 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 4 &lt;split [1979/0]&gt; Fold04 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 5 &lt;split [1979/0]&gt; Fold05 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 6 &lt;split [1979/0]&gt; Fold06 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 7 &lt;split [1979/0]&gt; Fold07 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 8 &lt;split [1979/0]&gt; Fold08 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n 9 &lt;split [1979/0]&gt; Fold09 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;\n10 &lt;split [1981/0]&gt; Fold10 &lt;tibble [20 × 9]&gt; &lt;tibble [0 × 1]&gt;"
+  },
+  {
+    "objectID": "ml/tune-mod.html#finalized",
+    "href": "ml/tune-mod.html#finalized",
+    "title": "Tune Models",
+    "section": "Finalized",
+    "text": "Finalized\n\nSelect Best Tune Result\n\nlowest_rmse &lt;- select_best(ames_grid_search, metric = \"rmse\")\nclass(lowest_rmse)\n\n[1] \"tbl_df\"     \"tbl\"        \"data.frame\"\n\nlowest_rmse\n\n# A tibble: 1 × 6\n      K weight_func dist_power   lon   lat .config              \n  &lt;int&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;                \n1    33 triweight        0.511    10     3 Preprocessor10_Model1\n\n\n\n\nLast Fit\n\names_res_last &lt;- workflow(ames_rec, knn_model) |&gt; \n  finalize_workflow(lowest_rmse) |&gt; \n  last_fit(split = data_split, metrics = metric_set(rmse))\n\n\nclass(ames_res_last)\n\n[1] \"last_fit\"         \"resample_results\" \"tune_results\"     \"tbl_df\"          \n[5] \"tbl\"              \"data.frame\"      \n\names_res_last\n\n# Resampling results\n# Manual resampling \n# A tibble: 1 × 6\n  splits             id               .metrics .notes   .predictions .workflow \n  &lt;list&gt;             &lt;chr&gt;            &lt;list&gt;   &lt;list&gt;   &lt;list&gt;       &lt;list&gt;    \n1 &lt;split [2197/733]&gt; train/test split &lt;tibble&gt; &lt;tibble&gt; &lt;tibble&gt;     &lt;workflow&gt;"
   },
   {
     "objectID": "stats/perf-mat.html#pre-processing",

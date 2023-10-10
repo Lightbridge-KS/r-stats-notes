@@ -1,0 +1,141 @@
+---
+title: "Tune Models"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("ml/tune-mod.qmd")
+```
+
+```{r load-pkg, message=FALSE, warning=FALSE}
+library(here)
+library(tidyverse)
+library(tidymodels)
+library(AmesHousing)
+
+tidymodels_prefer()
+```
+
+- [Example Analysis of Ames Housing Data](https://tune.tidymodels.org/reference/example_ames_knn.html)
+
+## Split
+
+```{r}
+ames <- make_ames()
+
+set.seed(4595)
+data_split <- initial_split(ames, strata = "Sale_Price")
+
+ames_train <- training(data_split)
+
+set.seed(2453)
+rs_splits <- vfold_cv(ames_train, strata = "Sale_Price")
+```
+
+## Recipes
+
+```{r}
+ames_rec <-
+  recipe(Sale_Price ~ ., data = ames_train) %>%
+  step_log(Sale_Price, base = 10) %>%
+  step_YeoJohnson(Lot_Area, Gr_Liv_Area) %>%
+  step_other(Neighborhood, threshold = .1)  %>%
+  step_dummy(all_nominal()) %>%
+  step_zv(all_predictors()) %>%
+  step_ns(Longitude, deg_free = tune("lon")) %>%
+  step_ns(Latitude, deg_free = tune("lat"))
+```
+
+
+## Models
+
+```{r}
+knn_model <-
+  nearest_neighbor(
+    mode = "regression",
+    neighbors = tune("K"),
+    weight_func = tune(),
+    dist_power = tune()
+  ) %>%
+  set_engine("kknn")
+```
+
+
+## Workflow & Parameters
+
+```{r}
+ames_wflow <-
+  workflow() %>%
+  add_recipe(ames_rec) %>%
+  add_model(knn_model)
+
+class(ames_wflow)
+```
+
+```{r}
+ames_set <-
+  extract_parameter_set_dials(ames_wflow) %>%
+  update(K = neighbors(c(1, 50)))
+
+class(ames_set)
+ames_set
+```
+
+## Grid
+
+### Parameter Grids
+
+```{r}
+set.seed(7014)
+
+### Space-filling parameter grids
+ames_grid <-
+  ames_set %>%
+  grid_max_entropy(size = 10)
+
+ames_grid
+```
+
+### Grid Search !
+
+```r
+### Perform Grid Search (Not Run)
+
+ames_grid_search <-
+  tune_grid(
+    ames_wflow,
+    resamples = rs_splits,
+    grid = ames_grid
+  )
+```
+
+
+```{r}
+data("example_ames_knn")
+class(ames_grid_search)
+ames_grid_search
+```
+
+## Finalized
+
+
+### Select Best Tune Result
+
+```{r}
+lowest_rmse <- select_best(ames_grid_search, metric = "rmse")
+class(lowest_rmse)
+lowest_rmse
+```
+### Last Fit
+
+```{r cache=TRUE, cache.lazy=TRUE}
+ames_res_last <- workflow(ames_rec, knn_model) |> 
+  finalize_workflow(lowest_rmse) |> 
+  last_fit(split = data_split, metrics = metric_set(rmse))
+
+
+class(ames_res_last)
+ames_res_last
+```
+
+
