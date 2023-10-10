@@ -19,12 +19,16 @@ book:
     - part: "Diagnostic Study"
       chapters:
       - "stats/dta.qmd"
+      - "stats/perf-mat.qmd"
     - part: "ML"
       chapters: 
       - "ml/tidymod-overview.qmd"
+      - "ml/ml-ops.qmd"
       - "ml/compare-mod.qmd"
       - "ml/tune-mod.qmd"
-      - "stats/perf-mat.qmd"
+    - part: "Performace"
+      chapters:
+      - "misc/parallel.qmd"
     - summary.qmd
     - references.qmd
 

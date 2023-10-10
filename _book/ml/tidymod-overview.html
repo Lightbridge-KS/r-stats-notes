@@ -64,8 +64,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../ml/compare-mod.html" rel="next">
-<link href="../stats/dta.html" rel="prev">
+<link href="../ml/ml-ops.html" rel="next">
+<link href="../stats/perf-mat.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html">ML</a></li><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tidymodels Overview</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html">ML</a></li><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Tidymodels Overview</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -196,6 +196,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="../stats/dta.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Diagnosis Accuracy</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stats/perf-mat.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-class Performance Matrix</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -214,6 +219,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../ml/ml-ops.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ML Ops with Penguin</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../ml/compare-mod.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparing Models</span></a>
   </div>
 </li>
@@ -222,9 +232,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="../ml/tune-mod.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tune Models</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Performace</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../stats/perf-mat.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multi-class Performance Matrix</span></a>
+  <a href="../misc/parallel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Parallel Processing</span></a>
   </div>
 </li>
       </ul>
@@ -340,7 +361,7 @@ $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, 
 <div id="fig-plot-pen" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="tidymod-overview_files/figure-html/fig-plot-pen-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Figure&nbsp;5.1: <strong>?(caption)</strong></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;6.1: <strong>?(caption)</strong></figcaption>
 </figure>
 </div>
 </div>
@@ -672,7 +693,7 @@ $ .pred_Gentoo      &lt;dbl&gt; 1.147426e-09, 3.454101e-07, 6.534172e-11, NA, 2.
 <p><img src="tidymod-overview_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Gentoo curve is on the top-left see <a href="#fig-plot-pen">Figure&nbsp;<span>5.1</span></a> for reason.</p>
+<p>Gentoo curve is on the top-left see <a href="#fig-plot-pen">Figure&nbsp;<span>6.1</span></a> for reason.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(pen_res_base, <span class="at">truth =</span> species, </span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>        .pred_Adelie, .pred_Chinstrap, .pred_Gentoo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1107,13 +1128,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../stats/dta.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Diagnosis Accuracy</span></span>
+      <a href="../stats/perf-mat.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Multi-class Performance Matrix</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../ml/compare-mod.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-title">Comparing Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../ml/ml-ops.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">ML Ops with Penguin</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

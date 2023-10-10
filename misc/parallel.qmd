@@ -1,0 +1,51 @@
+---
+title: "Parallel Processing"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("misc/parallel.qmd")
+```
+
+
+## {parallel}
+
+```{r}
+# The number of physical cores in the hardware:
+parallel::detectCores(logical = FALSE)
+
+
+# The number of possible independent processes that can 
+# be simultaneously used:  
+parallel::detectCores(logical = TRUE)
+```
+
+## {doMC}
+
+```{r}
+# Unix and macOS only
+library(doMC)
+registerDoMC(cores = 8)
+
+# Now run fit_resamples()...
+
+registerDoSEQ() # Reset
+```
+
+
+## {doParallel}
+
+```{r}
+# All operating systems
+library(doParallel)
+# Create a cluster object and then register: 
+cl <- makePSOCKcluster(8)
+registerDoParallel(cl)
+
+## Run
+
+# Reset
+stopCluster(cl)
+```
+
+

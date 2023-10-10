@@ -1,0 +1,14 @@
+{
+  "hash": "c6c1a92481df201ffa017f14c0733fcd",
+  "result": {
+    "markdown": "---\ntitle: \"Parallel Processing\"\n---\n\n\n\n\n\n## {parallel}\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# The number of physical cores in the hardware:\nparallel::detectCores(logical = FALSE)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 4\n```\n:::\n\n```{.r .cell-code}\n# The number of possible independent processes that can \n# be simultaneously used:  \nparallel::detectCores(logical = TRUE)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 8\n```\n:::\n:::\n\n\n## {doMC}\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Unix and macOS only\nlibrary(doMC)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\nLoading required package: foreach\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nLoading required package: iterators\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nLoading required package: parallel\n```\n:::\n\n```{.r .cell-code}\nregisterDoMC(cores = 8)\n\n# Now run fit_resamples()...\n\nregisterDoSEQ() # Reset\n```\n:::\n\n\n\n## {doParallel}\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# All operating systems\nlibrary(doParallel)\n# Create a cluster object and then register: \ncl <- makePSOCKcluster(8)\nregisterDoParallel(cl)\n\n## Run\n\n# Reset\nstopCluster(cl)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

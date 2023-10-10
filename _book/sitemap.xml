@@ -2,46 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/index.html</loc>
-    <lastmod>2023-10-10T12:17:01.522Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.423Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/normality-test.html</loc>
-    <lastmod>2023-10-10T12:17:01.536Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.470Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/infer.html</loc>
-    <lastmod>2023-10-10T12:17:01.558Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.506Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/wilcoxon.html</loc>
-    <lastmod>2023-10-10T12:17:01.576Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.551Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/dta.html</loc>
-    <lastmod>2023-10-10T12:17:01.597Z</lastmod>
-  </url>
-  <url>
-    <loc>https://r-stats-lightbridge.netlify.app/ml/tidymod-overview.html</loc>
-    <lastmod>2023-10-10T12:17:01.622Z</lastmod>
-  </url>
-  <url>
-    <loc>https://r-stats-lightbridge.netlify.app/ml/compare-mod.html</loc>
-    <lastmod>2023-10-10T12:17:01.634Z</lastmod>
-  </url>
-  <url>
-    <loc>https://r-stats-lightbridge.netlify.app/ml/tune-mod.html</loc>
-    <lastmod>2023-10-10T12:17:01.649Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.618Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/perf-mat.html</loc>
-    <lastmod>2023-10-10T12:17:01.660Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.641Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/tidymod-overview.html</loc>
+    <lastmod>2023-10-10T12:56:04.678Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/ml-ops.html</loc>
+    <lastmod>2023-10-10T12:58:35.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/compare-mod.html</loc>
+    <lastmod>2023-10-10T12:56:04.723Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/ml/tune-mod.html</loc>
+    <lastmod>2023-10-10T12:56:04.751Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/misc/parallel.html</loc>
+    <lastmod>2023-10-10T12:56:04.767Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/summary.html</loc>
-    <lastmod>2023-10-10T12:17:01.669Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.777Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/references.html</loc>
-    <lastmod>2023-10-10T12:17:01.674Z</lastmod>
+    <lastmod>2023-10-10T12:56:04.787Z</lastmod>
   </url>
 </urlset>
