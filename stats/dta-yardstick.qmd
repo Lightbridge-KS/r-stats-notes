@@ -1,0 +1,442 @@
+---
+title: "DTA (Yardstick)"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/dta-yardstick.qmd")
+library(here)
+library(tidyverse)
+source(here("_common.R"))
+```
+
+
+```{r}
+library(yardstick)
+```
+
+
+```{r}
+data("pathology")
+glimpse(pathology)
+```
+
+## Confusion Matric
+
+```{r}
+cm <- conf_mat(pathology, truth = pathology, estimate = scan) 
+cm
+```
+
+```{r}
+summary(cm)
+```
+
+
+## Plot Bar Chart
+
+```{r}
+autoplot(cm, type = "mosaic")
+```
+
+```{r}
+autoplot(cm, type = "heatmap")
+```
+
+
+```{r}
+pathology_cell <- pathology |> 
+  count(pathology, scan) |> 
+  mutate(prop = n/sum(n))
+
+pathology_cell
+```
+
+
+```{r}
+pathology_cell |> 
+  ggplot(aes(pathology, prop, fill = scan, color = scan)) +
+  geom_col(alpha = 0.5, position = "fill")
+```
+
+
+
+## Metric: Default
+
+```{r}
+pathology |> metrics(truth = pathology, estimate = scan)
+```
+
+## Metric Set
+
+```{r}
+class_metrics_1 <- metric_set(accuracy, sens, spec, ppv, npv)
+```
+
+
+```{r}
+pathology |> class_metrics_1(truth = pathology, estimate = scan)
+```
+
+## Custom Class Metric
+
+[Miss Rate Example](https://www.tidymodels.org/learn/develop/metrics/#class-example-miss-rate)
+
+
+## Custom LR+ & LR-
+
+From: [How to implemen custom metric set](https://www.tidymodels.org/learn/develop/metrics/#class-example-miss-rate)
+
+### Formular
+
+The **positive** likelihood ratio is calculated as:
+
+$$
+{\displaystyle {\text{LR}}+={\frac {\text{sensitivity}}{1-{\text{specificity}}}}}
+$$
+
+
+$$
+{\displaystyle {\text{LR}}+={\frac {\text{TP / (TP + FN)}}{\text{FP / (FP + TN)}}}}
+$$
+
+The **negative** likelihood ratio is calculated as:
+
+
+$$
+{\displaystyle {\text{LR}}-={\frac {1-{\text{sensitivity}}}{\text{specificity}}}}
+$$
+
+$$
+{\displaystyle {\text{LR}}-={\frac {\text{FN / (TP + FN)}}{\text{TN / (FP + TN)}}}}
+$$
+
+### Example
+
+```{r pathology_xtab}
+pathology_xtab <- table(pathology$scan, pathology$pathology) 
+pathology_xtab
+```
+
+
+### Helpers
+
+```{r event_col}
+# Logic for `event_level`
+event_col <- function(xtab, event_level) {
+  if (identical(event_level, "first")) {
+    colnames(xtab)[[1]]
+  } else {
+    colnames(xtab)[[2]]
+  }
+}
+```
+
+```{r finalize_estimator_internal.lr_pos}
+finalize_estimator_internal.lr_pos <- function(metric_dispatcher, x, estimator, call) {
+  
+  validate_estimator(estimator, estimator_override = "binary")
+  if (!is.null(estimator)) {
+    return(estimator)
+  }
+  
+  lvls <- levels(x)
+  if (length(lvls) > 2) {
+    stop("A multiclass `truth` input was provided, but only `binary` is supported.")
+  } 
+  "binary"
+}
+
+```
+
+### Implement
+
+#### LR Pos
+
+```{r lr_pos_impl}
+lr_pos_impl <- function(truth, estimate, estimator, event_level) {
+  xtab <- table(estimate, truth)
+  # Rather than implement the actual method here, we rely on
+  # an *_estimator_impl() function that can handle binary
+  # and multiclass cases
+  lr_pos_estimator_impl(xtab, estimator, event_level)
+}
+```
+
+```{r lr_pos_estimator_impl}
+# This function switches between binary and multiclass implementations
+lr_pos_estimator_impl <- function(data, estimator, event_level) {
+  if(estimator == "binary") {
+    lr_pos_binary(data, event_level)
+  } else {
+    # Encapsulates the macro, macro weighted, and micro cases
+    # TODO
+  }
+}
+```
+
+#### LR Neg
+
+```{r lr_neg_impl}
+lr_neg_impl <- function(truth, estimate, estimator, event_level) {
+  xtab <- table(estimate, truth)
+  # Rather than implement the actual method here, we rely on
+  # an *_estimator_impl() function that can handle binary
+  # and multiclass cases
+  lr_neg_estimator_impl(xtab, estimator, event_level)
+}
+```
+
+```{r lr_neg_estimator_impl}
+# This function switches between binary and multiclass implementations
+lr_neg_estimator_impl <- function(data, estimator, event_level) {
+  if(estimator == "binary") {
+    lr_neg_binary(data, event_level)
+  } else {
+    # Encapsulates the macro, macro weighted, and micro cases
+    # TODO
+  }
+}
+```
+
+
+### Binary Implementation
+
+#### LR Pos
+
+```{r lr_pos_binary}
+lr_pos_binary <- function(data, event_level) {
+  col <- event_col(data, event_level)
+  col2 <- setdiff(colnames(data), col)
+  
+  tp <- data[col, col]
+  tn <- data[col2, col2]
+  fp <- data[col, col2]
+  fn <- data[col2, col]
+  # list(tp = tp, tn = tn, fp = fp, fn = fn)
+  (tp / (tp + fn)) / (fp / (fp + tn))
+  
+}
+
+lr_pos_binary(pathology_xtab, event_level = "first")
+```
+
+#### LR Neg
+
+```{r lr_neg_binary}
+lr_neg_binary <- function(data, event_level) {
+  col <- event_col(data, event_level)
+  col2 <- setdiff(colnames(data), col)
+  
+  tp <- data[col, col]
+  tn <- data[col2, col2]
+  fp <- data[col, col2]
+  fn <- data[col2, col]
+  # list(tp = tp, tn = tn, fp = fp, fn = fn)
+  (fn / (tp + fn)) / (tn / (fp + tn))
+  
+}
+
+lr_neg_binary(pathology_xtab, event_level = "first")
+```
+
+```{r}
+# Checking
+pathology_xtab
+colnames(pathology_xtab)
+
+# TP
+pathology_xtab["abnorm", "abnorm"]
+# TN
+pathology_xtab["norm", "norm"]
+# FP
+pathology_xtab["abnorm", "norm"]
+# FN
+pathology_xtab["norm", "abnorm"]
+```
+
+### Multiclass Implementation
+
+[TODO]
+
+### Vec implement
+
+
+#### LR Pos
+
+```{r lr_pos_vec}
+lr_pos_vec <- function(truth,
+                       estimate,
+                       estimator = NULL,
+                       na_rm = TRUE,
+                       case_weights = NULL,
+                       event_level = "first",
+                       ...) {
+  # calls finalize_estimator_internal() internally
+  estimator <- finalize_estimator(truth, estimator, metric_class = "lr_pos")
+
+  check_class_metric(truth, estimate, case_weights, estimator)
+
+  if (na_rm) {
+    result <- yardstick_remove_missing(truth, estimate, case_weights)
+
+    truth <- result$truth
+    estimate <- result$estimate
+    case_weights <- result$case_weights
+  } else if (yardstick_any_missing(truth, estimate, case_weights)) {
+    return(NA_real_)
+  }
+
+  lr_pos_impl(truth, estimate, estimator, event_level)
+}
+
+lr_pos_vec(pathology$pathology, pathology$scan)
+```
+
+#### LR Neg
+
+```{r lr_neg_vec}
+lr_neg_vec <- function(truth,
+                       estimate,
+                       estimator = NULL,
+                       na_rm = TRUE,
+                       case_weights = NULL,
+                       event_level = "first",
+                       ...) {
+  # calls finalize_estimator_internal() internally
+  estimator <- finalize_estimator(truth, estimator, metric_class = "lr_neg")
+
+  check_class_metric(truth, estimate, case_weights, estimator)
+
+  if (na_rm) {
+    result <- yardstick_remove_missing(truth, estimate, case_weights)
+
+    truth <- result$truth
+    estimate <- result$estimate
+    case_weights <- result$case_weights
+  } else if (yardstick_any_missing(truth, estimate, case_weights)) {
+    return(NA_real_)
+  }
+
+  lr_neg_impl(truth, estimate, estimator, event_level)
+}
+
+lr_neg_vec(pathology$pathology, pathology$scan)
+```
+
+
+### DF implement
+
+
+```{r}
+# LR Pos
+lr_pos <- function(data, ...) {
+  UseMethod("lr_pos")
+}
+
+lr_pos <- new_class_metric(lr_pos, direction = "maximize")
+
+# LR Neg
+lr_neg <- function(data, ...) {
+  UseMethod("lr_neg")
+}
+
+lr_neg <- new_class_metric(lr_neg, direction = "minimize")
+```
+
+
+```{r lr_pos.data.frame}
+lr_pos.data.frame <- function(data,
+                              truth,
+                              estimate,
+                              estimator = NULL,
+                              na_rm = TRUE,
+                              case_weights = NULL,
+                              event_level = "first",
+                              ...) {
+  class_metric_summarizer(
+    name = "lr_pos",
+    fn = lr_pos_vec,
+    data = data,
+    truth = !!rlang::enquo(truth),
+    estimate = !!rlang::enquo(estimate),
+    estimator = estimator,
+    na_rm = na_rm,
+    case_weights = !!rlang::enquo(case_weights),
+    event_level = event_level
+  )
+}
+```
+
+```{r lr_neg.data.frame}
+lr_neg.data.frame <- function(data,
+                              truth,
+                              estimate,
+                              estimator = NULL,
+                              na_rm = TRUE,
+                              case_weights = NULL,
+                              event_level = "first",
+                              ...) {
+  class_metric_summarizer(
+    name = "lr_neg",
+    fn = lr_neg_vec,
+    data = data,
+    truth = !!rlang::enquo(truth),
+    estimate = !!rlang::enquo(estimate),
+    estimator = estimator,
+    na_rm = na_rm,
+    case_weights = !!rlang::enquo(case_weights),
+    event_level = event_level
+  )
+}
+```
+
+
+### Using `lr_pos()`
+
+```{r}
+lr_pos(pathology, truth = pathology, estimate = scan)
+```
+```{r}
+lr_pos_vec(truth = pathology$pathology, estimate = pathology$scan)
+```
+
+### Using `lr_neg()`
+
+```{r}
+lr_neg(pathology, truth = pathology, estimate = scan)
+```
+```{r}
+lr_neg_vec(truth = pathology$pathology, estimate = pathology$scan)
+```
+
+### Using with `metric_set()`
+
+```{r class_metrics_2}
+class_metrics_2 <- metric_set(accuracy, sens, spec, lr_pos, lr_neg)
+class_metrics_2
+```
+
+```{r}
+conf_mat(pathology, truth = pathology, estimate = scan)
+```
+
+
+```{r}
+class_metrics_2(pathology, truth = pathology, estimate = scan)
+```
+
+Check LR+
+
+```{r}
+0.8953488	/ (1 - 0.6279070) # LR+ = Sens / (1-Spec)
+```
+
+Check LR-
+
+```{r} 
+(1 - 0.8953488)	/ 0.6279070	 # LR- = (1-Sens) / Spec
+```
+
+
+

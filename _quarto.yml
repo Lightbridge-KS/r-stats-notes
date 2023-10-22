@@ -19,6 +19,7 @@ book:
     - part: "Diagnostic Study"
       chapters:
       - "stats/dta.qmd"
+      - "stats/dta-yardstick.qmd"
       - "stats/perf-mat.qmd"
     - part: "ML"
       chapters: 
