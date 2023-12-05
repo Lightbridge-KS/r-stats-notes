@@ -1,0 +1,19 @@
+---
+title: "Sample Size for ML"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/sam-size-ml.qmd")
+library(here)
+library(tidyverse)
+```
+
+
+```{r}
+library(palmerpenguins)
+
+penguins
+```
+
+

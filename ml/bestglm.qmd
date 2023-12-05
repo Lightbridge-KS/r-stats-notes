@@ -1,0 +1,125 @@
+---
+title: "Best GLM"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("ml/bestglm.qmd")
+library(here)
+library(tidyverse)
+```
+
+- [Bestglm R package](http://cran.nexr.com/web/packages/bestglm/)
+- [Bestglm Paper](http://cran.nexr.com/web/packages/bestglm/vignettes/bestglm.pdf)
+
+
+```{r}
+library(bestglm)
+data(zprostate)
+```
+
+Outcome: `lpsa` = Prostate-Specific Antigen (psa)
+
+```{r}
+skimr::skim(zprostate)
+```
+## Regsubset
+
+```{r}
+train <- (zprostate[zprostate[, 10], ])[, -10]
+X <- train[, 1:8]
+y <- train[, 9]
+```
+
+```{r}
+out <- summary(regsubsets(x = X, y = y, nvmax = ncol(X)))
+Subsets <- out$which
+RSS <- out$rss
+
+
+zprostate_regsub_tbl <-
+  cbind(as.data.frame(Subsets), RSS = RSS) |> 
+  relocate(RSS) |> 
+  mutate(across(where(is.logical), ~ifelse(.x, "*", NA)))
+
+zprostate_regsub_tbl
+```
+## Best GLM
+
+### Linear Reg
+
+```{r}
+# `y` must be the last column
+Xy <- cbind(as.data.frame(X), lpsa = y)
+
+zprostate_bestglm <- bestglm(Xy)
+names(zprostate_bestglm)
+```
+
+
+`BestModel`: lm or glm object giving the best model
+
+```{r}
+zprostate_bestglm$BestModel
+```
+
+`BestModels`: a 𝑇 × 𝑝 logical matrix showing which variables are included in the top 𝑇 models
+
+```{r}
+zprostate_bestglm$BestModels
+```
+
+`Subsets`: a (𝑝 + 1) × 𝑝 logical matrix showing which variables are included for subset sizes 𝑘 = 0, . . . , 𝑝 have the smallest deviance
+
+```{r}
+zprostate_bestglm$Subsets
+```
+`qTable`: a table showing all possible model choices for different intervals of 𝑞.
+
+```{r}
+zprostate_bestglm$qTable
+```
+
+### Log Reg
+
+```{r include=FALSE, eval=FALSE}
+# Not Work
+library(palmerpenguins)
+data(penguins)
+
+penguins_Xy <- penguins |> 
+  relocate(sex, .after = last_col()) |> 
+  select(species, bill_length_mm, sex) |> 
+  mutate(across(where(is.integer), as.double)) |> 
+  filter(!if_any(everything(), ~is.na(.x))) 
+```
+
+```{r}
+library(ISLR2)
+data("Default")
+```
+
+
+```{r}
+Default_Xy <- Default |> relocate(default, .after = last_col())
+```
+
+
+```{r}
+Default_b.glm <- bestglm(Default_Xy, family = binomial(), 
+                         IC = "BIC")
+```
+
+
+`BestModel`: lm or glm object giving the best model
+
+```{r}
+Default_b.glm$BestModel
+```
+
+`BestModels`: a 𝑇 × 𝑝 logical matrix showing which variables are included in the top 𝑇 models
+
+
+```{r}
+Default_b.glm$BestModels
+```

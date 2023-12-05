@@ -24,6 +24,9 @@ book:
       - "stats/dta.qmd"
       - "stats/dta-yardstick.qmd"
       - "stats/perf-mat.qmd"
+    - part: "Feature Eng"
+      chapters: 
+      - "ml/bestglm.qmd"
     - part: "ML"
       chapters: 
       - "ml/tidymod-overview.qmd"
