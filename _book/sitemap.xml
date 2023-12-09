@@ -2,66 +2,70 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/index.html</loc>
-    <lastmod>2023-12-05T16:19:35.212Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.385Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/normality-test.html</loc>
-    <lastmod>2023-12-05T16:19:35.225Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.413Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/infer.html</loc>
-    <lastmod>2023-12-05T16:19:35.249Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.449Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/wilcoxon.html</loc>
-    <lastmod>2023-12-05T16:19:35.266Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.478Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/sam-size.html</loc>
-    <lastmod>2023-12-05T16:19:35.307Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.559Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/stats/causal.html</loc>
+    <lastmod>2023-12-09T17:08:17.627Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/dta.html</loc>
-    <lastmod>2023-12-05T16:19:35.327Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.660Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/dta-yardstick.html</loc>
-    <lastmod>2023-12-05T16:19:35.365Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.724Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/perf-mat.html</loc>
-    <lastmod>2023-12-05T16:19:35.378Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.742Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/bestglm.html</loc>
-    <lastmod>2023-12-05T16:19:35.397Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.776Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/tidymod-overview.html</loc>
-    <lastmod>2023-12-05T16:19:35.422Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.809Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/ml-ops.html</loc>
-    <lastmod>2023-12-05T16:19:35.441Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.839Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/compare-mod.html</loc>
-    <lastmod>2023-12-05T16:19:35.461Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.868Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/ml/tune-mod.html</loc>
-    <lastmod>2023-12-05T16:19:35.483Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.895Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/misc/parallel.html</loc>
-    <lastmod>2023-12-05T16:19:35.492Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.911Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/summary.html</loc>
-    <lastmod>2023-12-05T16:19:35.499Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.923Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/references.html</loc>
-    <lastmod>2023-12-05T16:19:35.510Z</lastmod>
+    <lastmod>2023-12-09T17:08:17.935Z</lastmod>
   </url>
 </urlset>

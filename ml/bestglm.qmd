@@ -82,18 +82,6 @@ zprostate_bestglm$qTable
 
 ### Log Reg
 
-```{r include=FALSE, eval=FALSE}
-# Not Work
-library(palmerpenguins)
-data(penguins)
-
-penguins_Xy <- penguins |> 
-  relocate(sex, .after = last_col()) |> 
-  select(species, bill_length_mm, sex) |> 
-  mutate(across(where(is.integer), as.double)) |> 
-  filter(!if_any(everything(), ~is.na(.x))) 
-```
-
 ```{r}
 library(ISLR2)
 data("Default")
@@ -123,3 +111,29 @@ Default_b.glm$BestModel
 ```{r}
 Default_b.glm$BestModels
 ```
+
+### Log Reg (Penguin)
+
+```{r}
+library(palmerpenguins)
+data(penguins)
+# Only work with this
+penguins_Xy <- penguins |> 
+  relocate(sex, .after = last_col()) |> 
+  select(ends_with("_mm"), body_mass_g, sex) |> 
+  mutate(across(where(is.integer), as.double)) |> 
+  filter(!if_any(everything(), ~is.na(.x))) |> 
+  as.data.frame() # Must
+
+head(penguins_Xy)
+```
+
+```{r}
+penguins_bestglm <- bestglm::bestglm(penguins_Xy, 
+                                     family = binomial())
+```
+
+```{r}
+penguins_bestglm$BestModels
+```
+

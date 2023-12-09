@@ -19,6 +19,9 @@ book:
     - part: "Sample Size"
       chapters: 
         - "stats/sam-size.qmd"
+    - part: "Causal"
+      chapters: 
+        - "stats/causal.qmd"
     - part: "Diagnostic Study"
       chapters:
       - "stats/dta.qmd"
@@ -47,6 +50,8 @@ format:
       light: zephyr #cosmo
       dark: superhero
     number-sections: false
+    toc: true
+    toc-depth: 4
   #pdf:
     #documentclass: scrreprt
 

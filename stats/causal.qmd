@@ -1,0 +1,246 @@
+---
+title: "Causal Inference - Intro"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/causal.qmd")
+library(here)
+library(tidyverse)
+```
+
+Using data & diagram from [r-causal: chapter 2](https://www.r-causal.org/chapters/02-whole-game#model-our-assumptions)
+
+```{r}
+library(gtsummary)
+library(corrr)
+```
+
+```{r net_data}
+net_data <- read_rds(here("data/causal/net_data.Rds"))
+```
+
+## Explore
+
+Exposure: `net`
+
+Outcome: `malaria_risk`
+
+```{r}
+names(net_data)
+```
+
+```{r}
+skimr::skim(net_data)
+```
+
+```{r}
+net_data_dep_vars <- net_data |> 
+  select(!c(malaria_risk, id, net_num)) |> names()
+```
+
+## True Relationship
+
+![Actual relationship between variables](/pic/causal/fig-net-data-dag-1.png)
+
+
+## Correlation
+
+![Significant correlation path between variables](/pic/causal/fig-net-data-corr-path.png)
+
+
+```{r net_data_cor}
+net_data_cor <- net_data |> 
+  corrr::correlate(quiet = T) 
+```
+
+::: {.panel-tabset}
+
+### Corr Matrix
+
+```{r}
+corrr::rplot(shave(net_data_cor),  print_cor = TRUE)
+```
+
+### Network
+
+```{r}
+network_plot(net_data_cor)
+```
+
+:::
+
+
+## Outcome: `malaria_risk` (LM)
+
+### Univar LM
+
+
+![Significant variable of univariate linear regression with outcome = `malaria_risk`](/pic/causal/fig-net-data_uni-lm-malaria.png)
+
+```{r cache=TRUE}
+#| code-fold: true
+net_data_tbl.malaria.uv <- net_data |>
+  select(all_of(net_data_dep_vars), malaria_risk) |> 
+  tbl_uvregression(
+    method = lm,
+    y = malaria_risk,
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+  ) |> 
+  bold_p() |> 
+  bold_labels()
+
+net_data_tbl.malaria.uv
+```
+
+
+### Multivar LM 
+
+![Significant predictors using simple LM & best subset predictors using multivariate LM with outcome = `malaria_risk`](/pic/causal/fig-net-data_multi-lm-malaria.png)
+
+
+#### Using best subset with `leaps`
+
+```{r}
+library(leaps)
+source(here("R/leaps-extra.R"))
+```
+
+```{r}
+net_data_mod <- net_data |> select(all_of(net_data_dep_vars), malaria_risk)
+```
+
+```{r net_data_malaria_rss.fit}
+net_data_malaria_rss.fit <- leaps::regsubsets(
+  malaria_risk ~ ., 
+  data = net_data_mod, 
+  force.in = 1 # Force to include `net` as predictors
+  )
+
+# broom::tidy(net_data_malaria_rss.fit) 
+```
+
+
+```{r cache=TRUE}
+#| code-fold: true
+library(patchwork)
+library(latex2exp)
+
+p_cp <- autoplot(net_data_malaria_rss.fit, res = "mallows_cp") +
+  labs(y = TeX("$C_p$"))
+
+p_bic <- autoplot(net_data_malaria_rss.fit, res = "BIC")
+
+p_adj_rsq <- autoplot(net_data_malaria_rss.fit, res = "adj.r.squared") +
+  labs(y = TeX("Adjusted $R^2$"))
+
+p_cp + p_bic + p_adj_rsq +
+  plot_annotation(title = "Best Subset Selection at Each Model Sizes", 
+                  subtitle = TeX("Estimate test error by $C_p$, BIC, and Adjusted $R^2$"))
+```
+
+
+```{r}
+plot(net_data_malaria_rss.fit, scale = "bic")
+```
+
+#### Fit Best Multi LM
+
+
+
+```{r net_data_malaria_lm.fit}
+net_data_malaria_lm.fit <- lm(
+  malaria_risk ~ net + income + health + temperature + insecticide_resistance, 
+  data = net_data_mod
+  )
+```
+
+```{r cache=TRUE}
+#| code-fold: true
+net_data_tbl.malaria.mv <- net_data_malaria_lm.fit |> 
+  tbl_regression(
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+    ) |> 
+  bold_p() |> 
+  bold_labels()
+
+net_data_tbl.malaria.mv
+```
+
+
+### Summary 
+
+**Outcome = `malaria_risk`**
+
+![Significant predictors using simple LM & best subset predictors using multivariate LM with outcome = `malaria_risk`](/pic/causal/fig-net-data-uni-multi-lm-malaria-sum.png)
+
+
+```{r cache=TRUE}
+#| code-fold: true
+net_data_tbl.malaria.uv.mv <- tbl_merge(
+  list(net_data_tbl.malaria.uv, net_data_tbl.malaria.mv),
+  tab_spanner = c("**Univar**", "**Multivar**")
+  )
+
+net_data_tbl.malaria.uv.mv
+```
+
+
+
+## Outcome: `net` (LR)
+
+### Univar LogReg
+
+![Significant variable of univariate logistic regression with outcome = `net`](/pic/causal/fig-net-data_uni-lr-net.png)
+
+
+```{r cache=TRUE}
+#| code-fold: true
+net_data |>
+  select(all_of(net_data_dep_vars), malaria_risk) |> 
+  tbl_uvregression(
+    method = glm,
+    y = net,
+    method.args = list(family = binomial),
+    exponentiate = TRUE,
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+  ) |> 
+  bold_p() |> 
+  bold_labels()
+```
+
+### Multivar Logreg
+
+
+![Significant predictors using simple LR & best subset predictors using multivariate LR with outcome = `net`](/pic/causal/fig-net-data_multi-lr-net.png)
+
+
+```{r}
+library(bestglm)
+```
+
+```{r}
+net_data_Xy_net <- net_data_mod |> 
+  relocate(net, .after = last_col()) |> 
+  as.data.frame()
+```
+
+```{r cache=TRUE}
+net_data_net.bestglm <- bestglm::bestglm(net_data_Xy_net, 
+                                         family = binomial(), 
+                                         IC = "BIC")
+
+net_data_net.bestglm$BestModels
+```
+
+
+
+## Summary
+
+![Summary of univariate & multivariate analysis: correlation and regression with outcome as `malaria_risk` or `net`](/pic/causal/fig-net-data-summary.png)
+
+
+```{r cache=TRUE}
+#| code-fold: true
+net_data_tbl.malaria.uv.mv
+```
