@@ -537,5 +537,12 @@
     "title": "Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "stats/causal-dag.html#summary",
+    "href": "stats/causal-dag.html#summary",
+    "title": "Causal Inference (DAG)",
+    "section": "Summary",
+    "text": "Summary\n\n\n\nSignificant coefficient by correlation, simple and multiple LM"
   }
 ]

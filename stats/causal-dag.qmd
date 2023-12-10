@@ -272,5 +272,9 @@ tbl_merge(
 ```
 
 
+## Summary
+
+![Significant coefficient by correlation, simple and multiple LM](/pic/causal/fig-dag-path-types-coeff)
+
 
 
