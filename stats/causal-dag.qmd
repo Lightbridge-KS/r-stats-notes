@@ -64,6 +64,16 @@ p2 <- confounder_data |>
 p1 + p2
 ```
 
+### Corr
+
+```{r}
+lares::corr_cross(confounder_data)
+```
+
+```{r}
+correlation(confounder_data)
+```
+
 ### Model
 
 ```{r}
@@ -96,9 +106,7 @@ tbl_merge(
   )
 ```
 
-```{r}
-correlation(confounder_data)
-```
+
 
 ## Chain (Mediator)
 
@@ -136,6 +144,17 @@ p2 <- mediator_data |>
 p1 + p2
 ```
 
+### Corr
+
+```{r}
+lares::corr_cross(mediator_data)
+```
+
+
+```{r}
+correlation(mediator_data)
+```
+
 ### Model
 
 ```{r}
@@ -169,12 +188,10 @@ tbl_merge(
   )
 ```
 
-```{r}
-correlation(mediator_data)
-```
 
 
-## Collider 
+
+## Collider (Bias)
 
 ### Sim Data
 
@@ -208,6 +225,17 @@ p2 <- collider_data |>
   facet_wrap(~"adjusting for `q`\n(biased)")
 
 p1 + p2
+```
+
+### Corr
+
+```{r}
+lares::corr_cross(collider_data)
+```
+
+
+```{r}
+correlation(collider_data)
 ```
 
 ### Model
@@ -244,7 +272,5 @@ tbl_merge(
 ```
 
 
-```{r}
-correlation(collider_data)
-```
+
 
