@@ -1,0 +1,250 @@
+---
+title: "Causal Inference (DAG)"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("stats/causal-dag.qmd")
+library(here)
+library(tidyverse)
+```
+
+Code adapted from [r-causal (CH.5)](https://www.r-causal.org/chapters/05-dags)
+
+```{r}
+library(gtsummary)
+library(patchwork)
+library(correlation)
+```
+
+```{r tbl_regression_custom, include=FALSE}
+tbl_regression_custom <- function(model) {
+  
+  tbl_regression(model,
+    pvalue_fun = ~ style_pvalue(.x, digits = 3)
+    ) |> 
+  bold_p() |> 
+  bold_labels()
+}
+```
+
+![Causal Path Types](/pic/causal/fig-dag-path-types-1.png)
+
+## Fork (Confounder)
+
+### Sim Data
+
+```{r}
+set.seed(123)
+n <- 1000
+
+q <- rbinom(n, size = 1, prob = .35)
+x <- 2 * q + rnorm(n)
+y <- -3 * q + rnorm(n)
+
+confounder_data <- tibble(x, y, q = as.factor(q))
+```
+
+### Plot
+
+```{r, message=FALSE}
+#| code-fold: true
+p1 <- confounder_data |>
+  ggplot(aes(x, y)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  facet_wrap(~"not adjusting for `q`\n(biased)")
+
+p2 <- confounder_data |>
+  ggplot(aes(x, y, color = q)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~"adjusting for `q`\n(unbiased)")
+
+p1 + p2
+```
+
+### Model
+
+```{r}
+# Not Adjust
+## y ~ x
+confounder_data.fit.y_x <- lm(y ~ x, data = confounder_data)
+## y ~ q 
+confounder_data.fit.y_q <- lm(y ~ q, data = confounder_data)
+## x ~ q
+confounder_data.fit.x_q <-  lm(x ~ q, data = confounder_data)
+
+# Adjusted: y ~ x + q 
+confounder_data.fit.y_xq <- lm(y ~ x + q, data = confounder_data)
+```
+
+```{r cache=TRUE}
+#| code-fold: true
+confounder_data.fit.tbls <- 
+  list(
+    y_x = confounder_data.fit.y_x,
+    y_q = confounder_data.fit.y_q,
+    x_q = confounder_data.fit.x_q,
+    y_xq = confounder_data.fit.y_xq
+  ) |> 
+  map(tbl_regression_custom)
+  
+confounder_data.fit.tbls |> 
+tbl_merge(
+  tab_spanner = c("**y ~ x**", "**y ~ q**", "**x ~ q**", "**y ~ x + q**")
+  )
+```
+
+```{r}
+correlation(confounder_data)
+```
+
+## Chain (Mediator)
+
+### Sim Data
+
+
+```{r}
+set.seed(123)
+x <- rnorm(n)
+
+linear_pred <- 2 * x + rnorm(n)
+prob <- 1 / (1 + exp(-linear_pred))
+q <- rbinom(n, size = 1, prob = prob)
+y <- 2 * q + rnorm(n)
+
+mediator_data <- tibble(x, y, q = as.factor(q))
+```
+
+### Plot
+
+```{r message=FALSE}
+#| code-fold: true
+p1 <- mediator_data |>
+  ggplot(aes(x, y)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  facet_wrap(~"not adjusting for `q`\n(total effect)")
+
+p2 <- mediator_data |>
+  ggplot(aes(x, y, color = q)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~"adjusting for `q`\n(direct effect)")
+
+p1 + p2
+```
+
+### Model
+
+```{r}
+# Not Adjust
+## y ~ x
+mediator_data.fit.y_x <- lm(y ~ x, data = mediator_data)
+## y ~ q 
+mediator_data.fit.y_q <- lm(y ~ q, data = mediator_data)
+## x ~ q
+mediator_data.fit.x_q <-  lm(x ~ q, data = mediator_data)
+
+# Adjusted: y ~ x + q 
+mediator_data.fit.y_xq <- lm(y ~ x + q, data = mediator_data)
+```
+
+
+```{r cache=TRUE}
+#| code-fold: true
+mediator_data.fit.tbls <- 
+  list(
+    y_x = mediator_data.fit.y_x,
+    y_q = mediator_data.fit.y_q,
+    x_q = mediator_data.fit.x_q,
+    y_xq = mediator_data.fit.y_xq
+  ) |> 
+  map(tbl_regression_custom)
+  
+mediator_data.fit.tbls |> 
+tbl_merge(
+  tab_spanner = c("**y ~ x**", "**y ~ q**", "**x ~ q**", "**y ~ x + q**")
+  )
+```
+
+```{r}
+correlation(mediator_data)
+```
+
+
+## Collider 
+
+### Sim Data
+
+
+```{r}
+set.seed(1)
+x <- rnorm(n)
+y <- rnorm(n)
+
+linear_pred <- 2 * x + 3 * y + rnorm(n)
+prob <- 1 / (1 + exp(-linear_pred))
+q <- rbinom(n, size = 1, prob = prob)
+
+collider_data <- tibble(x, y, q = as.factor(q))
+```
+
+### Plot
+
+```{r message=FALSE}
+#| code-fold: true
+p1 <- collider_data |>
+  ggplot(aes(x, y)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  facet_wrap(~"not adjusting for `q`\n(unbiased)")
+
+p2 <- collider_data |>
+  ggplot(aes(x, y, color = q)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~"adjusting for `q`\n(biased)")
+
+p1 + p2
+```
+
+### Model
+
+```{r}
+# Not Adjust
+## y ~ x
+collider_data.fit.y_x <- lm(y ~ x, data = collider_data)
+## y ~ q 
+collider_data.fit.y_q <- lm(y ~ q, data = collider_data)
+## x ~ q
+collider_data.fit.x_q <-  lm(x ~ q, data = collider_data)
+
+# Bias: y ~ x + q 
+collider_data.fit.y_xq <- lm(y ~ x + q, data = collider_data)
+```
+
+
+```{r cache=TRUE}
+#| code-fold: true
+collider_data.fit.tbls <- 
+  list(
+    y_x = collider_data.fit.y_x,
+    y_q = collider_data.fit.y_q,
+    x_q = collider_data.fit.x_q,
+    y_xq = collider_data.fit.y_xq
+  ) |> 
+  map(tbl_regression_custom)
+  
+collider_data.fit.tbls |> 
+tbl_merge(
+  tab_spanner = c("**y ~ x**", "**y ~ q**", "**x ~ q**", "**Bias: y ~ x + q**")
+  )
+```
+
+
+```{r}
+correlation(collider_data)
+```
+

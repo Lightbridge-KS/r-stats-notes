@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html">ML</a></li><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Tidymodels Overview</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html">ML</a></li><li class="breadcrumb-item"><a href="../ml/tidymod-overview.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Tidymodels Overview</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -209,7 +209,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../stats/causal.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Causal Inference - Intro</span></a>
+  <a href="../stats/causal-dag.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Causal Inference (DAG)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../stats/causal-malaria.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Causal Inference (Malaria)</span></a>
   </div>
 </li>
       </ul>
@@ -424,7 +429,7 @@ $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, 
 <div id="fig-plot-pen" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="tidymod-overview_files/figure-html/fig-plot-pen-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Figure&nbsp;10.1: <strong>?(caption)</strong></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;11.1: <strong>?(caption)</strong></figcaption>
 </figure>
 </div>
 </div>
@@ -756,7 +761,7 @@ $ .pred_Gentoo      &lt;dbl&gt; 1.147426e-09, 3.454101e-07, 6.534172e-11, NA, 2.
 <p><img src="tidymod-overview_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Gentoo curve is on the top-left see <a href="#fig-plot-pen">Figure&nbsp;<span>10.1</span></a> for reason.</p>
+<p>Gentoo curve is on the top-left see <a href="#fig-plot-pen">Figure&nbsp;<span>11.1</span></a> for reason.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(pen_res_base, <span class="at">truth =</span> species, </span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>        .pred_Adelie, .pred_Chinstrap, .pred_Gentoo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -21,7 +21,8 @@ book:
         - "stats/sam-size.qmd"
     - part: "Causal"
       chapters: 
-        - "stats/causal.qmd"
+        - "stats/causal-dag.qmd"
+        - "stats/causal-malaria.qmd"
     - part: "Diagnostic Study"
       chapters:
       - "stats/dta.qmd"
