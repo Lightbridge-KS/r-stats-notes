@@ -109,7 +109,7 @@
     "href": "stats/sam-size.html#overview",
     "title": "Sample Size (Traditional)",
     "section": "Overview",
-    "text": "Overview\n\n\n\nPackages for Sample Size\n\n\n\nConventional Effect Size\n\ncohen.ES(test = \"t\", size = \"medium\")\n\n\n     Conventional effect size from Cohen (1982) \n\n           test = t\n           size = medium\n    effect.size = 0.5"
+    "text": "Overview\n\n\n\nPackages for Sample Size\n\n\n\n\n\nFunctions & packages for Sample Size\n\n\n\nTypical Values\n\nA two-tailed test\na significance of 0.05 and a power of 80% was established.\nFor nonparametric tests on continuous variables, as a rule of thumb, calculate the sample size required for parametric tests and add 15%\n\n\n\nEffect Size\n\nEffect size can be defined as ‘a standardized measure of the magnitude of the mean difference or relationship between study groups’\nAn index that divides the effect size by its dispersion (standard deviation, etc.) is not affected by the measurement unit and can be used regardless of the unit, and is called an ‘effect size index’ or ’standardized effect size\nWhether an effect size should be interpreted as small, medium, or large may depend on the analysis method.\nWe use the guidelines mentioned by Cohen and Sawilowsky and use the medium effect size considered for each test in the examples below.\n\n\n\nConventional Effect Size\n\ncohen.ES(test = \"t\", size = \"medium\")\n\n\n     Conventional effect size from Cohen (1982) \n\n           test = t\n           size = medium\n    effect.size = 0.5"
   },
   {
     "objectID": "stats/sam-size.html#two-means-t-test",

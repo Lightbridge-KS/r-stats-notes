@@ -19,7 +19,27 @@ library(simstudy)
 
 ## Overview
 
-![Packages for Sample Size](/pic/sample-size-pkg.png)
+![Packages for Sample Size](/pic/sample-size/sample-size-pkg.png)
+
+
+![Functions & packages for Sample Size](/pic/sample-size/sample-size-pkg-2.png)
+
+### Typical Values
+
+- A two-tailed test
+- a significance of **0.05** and a power of **80%** was established. 
+
+- For **nonparametric tests** on continuous variables, as a rule of thumb, calculate the sample size required for parametric tests and **add 15%**
+
+### Effect Size
+
+- Effect size can be defined as ‘a standardized measure of the magnitude of the mean difference or relationship between study groups’
+
+- An index that divides the effect size by its dispersion (standard deviation, etc.) is not affected by the measurement unit and can be used regardless of the unit, and is called an ‘effect size index’ or ‘standardized effect size
+
+- Whether an effect size should be interpreted as small, medium, or large may depend on the analysis method. 
+
+- We use the guidelines mentioned by Cohen and Sawilowsky and use the medium effect size considered for each test in the examples below.
 
 ### Conventional Effect Size
 
