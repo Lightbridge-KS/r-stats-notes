@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/sam-size.html</loc>
-    <lastmod>2023-12-14T15:07:33.570Z</lastmod>
+    <lastmod>2023-12-15T13:48:13.571Z</lastmod>
   </url>
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/stats/causal-dag.html</loc>
@@ -71,5 +71,9 @@
   <url>
     <loc>https://r-stats-lightbridge.netlify.app/references.html</loc>
     <lastmod>2023-12-10T02:59:09.090Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r-stats-lightbridge.netlify.app/stats/sam-size-2.html</loc>
+    <lastmod>2023-12-15T13:48:16.051Z</lastmod>
   </url>
 </urlset>

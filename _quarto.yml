@@ -19,6 +19,7 @@ book:
     - part: "Sample Size"
       chapters: 
         - "stats/sam-size.qmd"
+        - "stats/sam-size-2.qmd"
     - part: "Causal"
       chapters: 
         - "stats/causal-dag.qmd"
