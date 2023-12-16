@@ -341,14 +341,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#typical-values" id="toc-typical-values" class="nav-link" data-scroll-target="#typical-values">Typical Values</a></li>
   <li><a href="#effect-size" id="toc-effect-size" class="nav-link" data-scroll-target="#effect-size">Effect Size</a></li>
   <li><a href="#conventional-effect-size" id="toc-conventional-effect-size" class="nav-link" data-scroll-target="#conventional-effect-size">Conventional Effect Size</a></li>
+  <li><a href="#dropout-rate" id="toc-dropout-rate" class="nav-link" data-scroll-target="#dropout-rate">Dropout Rate</a></li>
   </ul></li>
-  <li><a href="#continuous-outcome" id="toc-continuous-outcome" class="nav-link" data-scroll-target="#continuous-outcome">Continuous outcome</a>
+  <li><a href="#continuous-outcome-of-2-groups" id="toc-continuous-outcome-of-2-groups" class="nav-link" data-scroll-target="#continuous-outcome-of-2-groups">Continuous outcome of 2 groups</a>
   <ul>
-  <li><a href="#one-sample-t-test" id="toc-one-sample-t-test" class="nav-link" data-scroll-target="#one-sample-t-test">One-sample t-test</a></li>
+  <li><a href="#one-sample-t-test" id="toc-one-sample-t-test" class="nav-link" data-scroll-target="#one-sample-t-test">One-sample t-test</a>
+  <ul class="collapse">
   <li><a href="#ex-1" id="toc-ex-1" class="nav-link" data-scroll-target="#ex-1">Ex 1</a></li>
   <li><a href="#ex-2-new-dm-drug" id="toc-ex-2-new-dm-drug" class="nav-link" data-scroll-target="#ex-2-new-dm-drug">Ex 2: New DM Drug</a></li>
   </ul></li>
-  <li><a href="#proprotion" id="toc-proprotion" class="nav-link" data-scroll-target="#proprotion">Proprotion</a></li>
+  <li><a href="#two-sample-t-test" id="toc-two-sample-t-test" class="nav-link" data-scroll-target="#two-sample-t-test">Two-sample t-test</a></li>
+  <li><a href="#paired-t-test" id="toc-paired-t-test" class="nav-link" data-scroll-target="#paired-t-test">Paired t-test</a></li>
+  <li><a href="#non-parametric" id="toc-non-parametric" class="nav-link" data-scroll-target="#non-parametric">Non-parametric</a>
+  <ul class="collapse">
+  <li><a href="#one-sample-wilcoxon-test-table-3-no.-5" id="toc-one-sample-wilcoxon-test-table-3-no.-5" class="nav-link" data-scroll-target="#one-sample-wilcoxon-test-table-3-no.-5">One-sample Wilcoxon test (Table 3, no. 5)</a></li>
+  <li><a href="#mann-whitney-u-test-table-3-no.-6" id="toc-mann-whitney-u-test-table-3-no.-6" class="nav-link" data-scroll-target="#mann-whitney-u-test-table-3-no.-6">Mann-Whitney U test (Table 3, no. 6)</a></li>
+  <li><a href="#paired-wilcoxon-test-table-3-no.-7" id="toc-paired-wilcoxon-test-table-3-no.-7" class="nav-link" data-scroll-target="#paired-wilcoxon-test-table-3-no.-7">Paired Wilcoxon test (Table 3, no. 7)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#continuous-outcome-of-3-groups" id="toc-continuous-outcome-of-3-groups" class="nav-link" data-scroll-target="#continuous-outcome-of-3-groups">Continuous outcome of ≥3 groups</a>
+  <ul>
+  <li><a href="#anova-parametric" id="toc-anova-parametric" class="nav-link" data-scroll-target="#anova-parametric">ANOVA (Parametric)</a></li>
+  <li><a href="#kruskal-wallis-test-non-parametric" id="toc-kruskal-wallis-test-non-parametric" class="nav-link" data-scroll-target="#kruskal-wallis-test-non-parametric">Kruskal-Wallis test (Non-parametric)</a></li>
+  </ul></li>
+  <li><a href="#proprotion" id="toc-proprotion" class="nav-link" data-scroll-target="#proprotion">Proprotion</a>
+  <ul>
+  <li><a href="#effect-size-1" id="toc-effect-size-1" class="nav-link" data-scroll-target="#effect-size-1">Effect Size</a></li>
+  <li><a href="#one-sample-proportion-test" id="toc-one-sample-proportion-test" class="nav-link" data-scroll-target="#one-sample-proportion-test">One-sample proportion test</a></li>
+  <li><a href="#two-sample-proportion-test-equal-n" id="toc-two-sample-proportion-test-equal-n" class="nav-link" data-scroll-target="#two-sample-proportion-test-equal-n">Two-sample proportion test (equal n)</a></li>
+  <li><a href="#two-sample-proportion-test-unequal-n" id="toc-two-sample-proportion-test-unequal-n" class="nav-link" data-scroll-target="#two-sample-proportion-test-unequal-n">Two-sample proportion test (unequal n)</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -374,50 +396,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WebPower)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: MASS</code></pre>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WebPower)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'MASS'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:dplyr':
-
-    select</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: lme4</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Matrix</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'Matrix'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:tidyr':
-
-    expand, pack, unpack</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: lavaan</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is lavaan 0.6-16
-lavaan is FREE software! Please report any bugs.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: parallel</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: PearsonDS</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Sources:</strong></p>
+<p><strong>Adapted from these sources:</strong></p>
 <ul>
 <li><p><a href="https://bookdown.org/pdr_higgins/rmrwr/sample-size-calculations-with-pwr.html#sample-size-for-a-continuous-endpoint-t-test">RMRWR CH 19</a></p></li>
 <li><p><a href="https://doi.org/10.7602/jmis.2023.26.1.9">Sample size calculation in clinical trial using R</a></p></li>
@@ -450,7 +432,7 @@ lavaan is FREE software! Please report any bugs.</code></pre>
 <section id="conventional-effect-size" class="level3">
 <h3 class="anchored" data-anchor-id="conventional-effect-size">Conventional Effect Size</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.ES</span>(<span class="at">test =</span> <span class="st">"t"</span>, <span class="at">size =</span> <span class="st">"medium"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.ES</span>(<span class="at">test =</span> <span class="st">"t"</span>, <span class="at">size =</span> <span class="st">"medium"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      Conventional effect size from Cohen (1982) 
@@ -461,9 +443,14 @@ lavaan is FREE software! Please report any bugs.</code></pre>
 </div>
 </div>
 </section>
+<section id="dropout-rate" class="level3">
+<h3 class="anchored" data-anchor-id="dropout-rate">Dropout Rate</h3>
+<p>If <code>dr</code> is the dropout rate,</p>
+<p><code>N = n / (1 – dr)</code></p>
 </section>
-<section id="continuous-outcome" class="level2">
-<h2 class="anchored" data-anchor-id="continuous-outcome">Continuous outcome</h2>
+</section>
+<section id="continuous-outcome-of-2-groups" class="level2">
+<h2 class="anchored" data-anchor-id="continuous-outcome-of-2-groups">Continuous outcome of 2 groups</h2>
 <p><code>pwr.t.test()</code> function</p>
 <ul>
 <li>one-sample t test (type = “one.sample”)</li>
@@ -492,11 +479,10 @@ d = \frac{\mu_1 - \mu_0}{SD}
 <li><span class="math inline">\(\mu_1\)</span> = mean under <span class="math inline">\(H_1\)</span></li>
 <li><span class="math inline">\(SD\)</span> = SD under <span class="math inline">\(H_0\)</span></li>
 </ul>
-</section>
-<section id="ex-1" class="level3">
-<h3 class="anchored" data-anchor-id="ex-1">Ex 1</h3>
+<section id="ex-1" class="level4">
+<h4 class="anchored" data-anchor-id="ex-1">Ex 1</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.5</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.8</span>, <span class="at">type =</span> <span class="st">"one.sample"</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.5</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.8</span>, <span class="at">type =</span> <span class="st">"one.sample"</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      One-sample t test power calculation 
@@ -510,20 +496,20 @@ d = \frac{\mu_1 - \mu_0}{SD}
 </div>
 <p><strong>N = 34</strong> (If dropout rate of 20%, a total of 43 samples are required)</p>
 </section>
-<section id="ex-2-new-dm-drug" class="level3">
-<h3 class="anchored" data-anchor-id="ex-2-new-dm-drug">Ex 2: New DM Drug</h3>
+<section id="ex-2-new-dm-drug" class="level4">
+<h4 class="anchored" data-anchor-id="ex-2-new-dm-drug">Ex 2: New DM Drug</h4>
 <p>Let’s propose a study of a new drug to reduce hemoglobin A1c in type 2 diabetes over a 1 year study period. You estimate that your recruited participants will have a mean baseline A1c of 9.0, which will be unchanged by your placebo, but reduced (on average) to 7.0 by the study drug.</p>
 <p>let’s say 5.0 and 17.0 for min and max of Hgb A1c</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sd_approx <span class="ot">&lt;-</span> (<span class="dv">17</span> <span class="sc">-</span> <span class="dv">5</span>)<span class="sc">/</span><span class="dv">4</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> (<span class="dv">9</span> <span class="sc">-</span> <span class="dv">7</span>) <span class="sc">/</span> sd_approx <span class="co"># delta / sd</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>pwr<span class="sc">::</span><span class="fu">pwr.t.test</span>(<span class="at">n =</span> <span class="cn">NULL</span>,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">sig.level =</span> <span class="fl">0.05</span>, </span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"two.sample"</span>, </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">"two.sided"</span>, </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">power =</span> <span class="fl">0.80</span>, </span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">d =</span> d1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sd_approx <span class="ot">&lt;-</span> (<span class="dv">17</span> <span class="sc">-</span> <span class="dv">5</span>)<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> (<span class="dv">9</span> <span class="sc">-</span> <span class="dv">7</span>) <span class="sc">/</span> sd_approx <span class="co"># delta / sd</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pwr<span class="sc">::</span><span class="fu">pwr.t.test</span>(<span class="at">n =</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">sig.level =</span> <span class="fl">0.05</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"two.sample"</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">"two.sided"</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">power =</span> <span class="fl">0.80</span>, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">d =</span> d1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      Two-sample t test power calculation 
@@ -540,12 +526,12 @@ NOTE: n is number in *each* group</code></pre>
 <p><strong>N = 37</strong> in each group (Assuming a 20% dropout rate in each arm, would require 37*5/4 subjects per arm)</p>
 <p>If study on 50 participants, what would the power be?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pwr<span class="sc">::</span><span class="fu">pwr.t.test</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="co"># note that n is per arm</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">sig.level =</span> <span class="fl">0.05</span>, </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"two.sample"</span>, </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">"two.sided"</span>, </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">power =</span> <span class="cn">NULL</span>, <span class="co"># ?</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">d =</span> <span class="fl">0.66</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pwr<span class="sc">::</span><span class="fu">pwr.t.test</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="co"># note that n is per arm</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">sig.level =</span> <span class="fl">0.05</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"two.sample"</span>, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">"two.sided"</span>, </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">power =</span> <span class="cn">NULL</span>, <span class="co"># ?</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">d =</span> <span class="fl">0.66</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      Two-sample t test power calculation 
@@ -561,26 +547,160 @@ NOTE: n is number in *each* group</code></pre>
 </div>
 </section>
 </section>
+<section id="two-sample-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="two-sample-t-test">Two-sample t-test</h3>
+<p>Cohen’s d for Welch:</p>
+<p><span class="math display">\[
+d = \frac{ \mu_1 - \mu_2 }{SD_{pool}}
+\]</span></p>
+<p>Where</p>
+<p><span class="math display">\[
+SD_{pool} = \sqrt{ (SD_1^2 + SD_2^2)/2 }
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.5</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.8</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Two-sample t test power calculation 
+
+              n = 63.76561
+              d = 0.5
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n is number in *each* group</code></pre>
+</div>
+</div>
+<p>Assuming a p-value of 0.05 and a power of 80% in a two-tailed test, when the effect size d = 0.5</p>
+<p><strong>N = 64 x 2</strong> (dropout rate of 20%, <strong>Total = 160</strong>)</p>
+</section>
+<section id="paired-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="paired-t-test">Paired t-test</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d =</span> <span class="fl">0.5</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.8</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"paired"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Paired t test power calculation 
+
+              n = 33.36713
+              d = 0.5
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n is number of *pairs*</code></pre>
+</div>
+</div>
+<p>Assuming a p-value of 0.05 and a power of 80% in a two-tailed test, the minimum number of pairs required to demonstrate statistical signifi- cance is 34 when the effect size d = 0.5.</p>
+<p>Considering the dropout rate of 20%, a total of <strong>43 pairs</strong> are required.</p>
+</section>
+<section id="non-parametric" class="level3">
+<h3 class="anchored" data-anchor-id="non-parametric">Non-parametric</h3>
+<section id="one-sample-wilcoxon-test-table-3-no.-5" class="level4">
+<h4 class="anchored" data-anchor-id="one-sample-wilcoxon-test-table-3-no.-5">One-sample Wilcoxon test (Table 3, no. 5)</h4>
+<p>A total of 43 was calculated by one-sample t test and adding 15% gives a total of 65.</p>
+</section>
+<section id="mann-whitney-u-test-table-3-no.-6" class="level4">
+<h4 class="anchored" data-anchor-id="mann-whitney-u-test-table-3-no.-6">Mann-Whitney U test (Table 3, no. 6)</h4>
+<p>By two-sample t test, 80 people were calculated for each group, and a total of 240 people was calculated by considering an addi- tional 15% for each group.</p>
+</section>
+<section id="paired-wilcoxon-test-table-3-no.-7" class="level4">
+<h4 class="anchored" data-anchor-id="paired-wilcoxon-test-table-3-no.-7">Paired Wilcoxon test (Table 3, no. 7)</h4>
+<p>The 43 pairs were calculated by paired t test, taking into ac- count an additional 15%, the total 65 pairs are required.</p>
+</section>
+</section>
+</section>
+<section id="continuous-outcome-of-3-groups" class="level2">
+<h2 class="anchored" data-anchor-id="continuous-outcome-of-3-groups">Continuous outcome of ≥3 groups</h2>
+<section id="anova-parametric" class="level3">
+<h3 class="anchored" data-anchor-id="anova-parametric">ANOVA (Parametric)</h3>
+<p>Studies that compare averages of three or more groups.</p>
+<ul>
+<li><code>k</code>: number of comparison groups</li>
+<li><code>f</code>: means the effect size (Cohen’s <span class="math inline">\(f\)</span>)</li>
+</ul>
+<p><span class="math display">\[
+f = \sqrt{ \frac{ \sum_{i=1}^{k} p_i \times (\mu_i - \mu)^2 }{\sigma^2} }
+\]</span></p>
+<p><strong>Effect Size (f-values)</strong></p>
+<ul>
+<li>Small = 0.1</li>
+<li>Medium = 0.25</li>
+<li>Large = 0.4</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.ES</span>(<span class="at">test =</span> <span class="st">"anov"</span>, <span class="at">size =</span> <span class="st">"medium"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Conventional effect size from Cohen (1982) 
+
+           test = anov
+           size = medium
+    effect.size = 0.25</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.anova.test</span> (<span class="at">k =</span> <span class="dv">3</span> , <span class="at">f =</span> <span class="fl">0.25</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Balanced one-way analysis of variance power calculation 
+
+              k = 3
+              n = 52.3966
+              f = 0.25
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: n is number in each group</code></pre>
+</div>
+</div>
+<p>Assume that the p-value is 0.05, the power is 80%, and the two-tailed test is performed. When the total comparison group was three groups and the effect size value was 0.25, the number of subjects calculated was <strong>53</strong> in each group.</p>
+<p>Considering a dropout rate of 20%, a <strong>total of 198 samples</strong> are required, which is calculated as 66 per group.</p>
+</section>
+<section id="kruskal-wallis-test-non-parametric" class="level3">
+<h3 class="anchored" data-anchor-id="kruskal-wallis-test-non-parametric">Kruskal-Wallis test (Non-parametric)</h3>
+<p>By one-way ANOVA, 66 people were calculated for each group, and if 15% of each group is additionally considered, a total of 297 people are calculated.</p>
+</section>
+</section>
 <section id="proprotion" class="level2">
 <h2 class="anchored" data-anchor-id="proprotion">Proprotion</h2>
+<section id="effect-size-1" class="level3">
+<h3 class="anchored" data-anchor-id="effect-size-1">Effect Size</h3>
+<p><strong>Cohen’s h</strong></p>
+<p><span class="math display">\[
+h =  2 \times asin(\sqrt{p_1})-2 \times asin(\sqrt{p_2})
+\]</span> <strong>h-values</strong></p>
+<ul>
+<li>Small = 0.2</li>
+<li>Medium = 0.5</li>
+<li>Large = 0.8</li>
+</ul>
+</section>
+<section id="one-sample-proportion-test" class="level3">
+<h3 class="anchored" data-anchor-id="one-sample-proportion-test">One-sample proportion test</h3>
 <p>Let’s assume that patients discharged from your hospital after a myocardial infarction have historically received a prescription for aspirin 80% of the time. A nursing quality improvement project on the cardiac floor has tried to increase this rate to 95%. How many patients do you need to track after the QI intervention to determine if the proportion has truly increased?</p>
 <ul>
 <li><p>the null hypothesis is that the proportion is 0.8</p></li>
 <li><p>the alternative hypothesis is that the proportion is 0.95.</p></li>
 </ul>
-<p>Effect size of: <code>2*asin(sqrt(p1))-2*asin(sqrt(p2))</code></p>
+<p>Effect size (Cohen’s h):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.95</span>, <span class="at">p2 =</span> <span class="fl">0.80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.95</span>, <span class="at">p2 =</span> <span class="fl">0.80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4762684</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.p.test</span>(<span class="at">h =</span> <span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.95</span>, <span class="at">p2 =</span> <span class="fl">0.80</span>),</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">n =</span> <span class="cn">NULL</span>,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">sig.level =</span> <span class="fl">0.05</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">power =</span> <span class="fl">0.80</span>,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.p.test</span>(<span class="at">h =</span> <span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.95</span>, <span class="at">p2 =</span> <span class="fl">0.80</span>),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">n =</span> <span class="cn">NULL</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">sig.level =</span> <span class="fl">0.05</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">power =</span> <span class="fl">0.80</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      proportion power calculation for binomial distribution (arcsine transformation) 
@@ -592,8 +712,64 @@ NOTE: n is number in *each* group</code></pre>
     alternative = greater</code></pre>
 </div>
 </div>
+</section>
+<section id="two-sample-proportion-test-equal-n" class="level3">
+<h3 class="anchored" data-anchor-id="two-sample-proportion-test-equal-n">Two-sample proportion test (equal n)</h3>
+<p>You want to calculate the sample size for a study of a cardiac plexus parasympathetic nerve stimulator for pulmonary hypertension. You expect the baseline one year mortality to be 15% in high-risk patients, and expect to reduce this to 5% with this intervention. You will compare a sham (turned off) stimulator to an active stimulator in a 2 arm study. Use a 2-sided alpha of 0.05 and a power of 80%.</p>
+<p>Effect size (Cohen’s h):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.15</span>, <span class="at">p2 =</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.344372</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.p.test</span>(<span class="at">h =</span> <span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.15</span>, <span class="at">p2 =</span> <span class="fl">0.05</span>),</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">n =</span> <span class="cn">NULL</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">sig.level =</span> <span class="fl">0.05</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">power =</span> <span class="fl">0.80</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     proportion power calculation for binomial distribution (arcsine transformation) 
+
+              h = 0.344372
+              n = 66.18368
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided</code></pre>
+</div>
+</div>
+<p>We need to enroll at least <strong>67 per arm, or 134 overall</strong>.</p>
+</section>
+<section id="two-sample-proportion-test-unequal-n" class="level3">
+<h3 class="anchored" data-anchor-id="two-sample-proportion-test-unequal-n">Two-sample proportion test (unequal n)</h3>
+<p>Imagine you want to enroll class IV CHF patients in a device trial in which they will be randomized 3:1 to a device (vs sham) that restores their serum sodium to 140 mmol/L and their albumin to 40 mg/dL each night. You expect to reduce 1 year mortality from 15% to 5% with this device. You want to know what your power will be if you enroll 300 in the device arm and 100 in the sham arm.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.2p2n.test</span>(<span class="at">h =</span> <span class="fu">ES.h</span>(<span class="at">p1 =</span> <span class="fl">0.15</span>, <span class="at">p2 =</span> <span class="fl">0.05</span>),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">n1 =</span> <span class="dv">300</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">n2 =</span> <span class="dv">100</span>, </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">sig.level =</span> <span class="fl">0.05</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">power =</span> <span class="cn">NULL</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     difference of proportion power calculation for binomial distribution (arcsine transformation) 
+
+              h = 0.344372
+             n1 = 300
+             n2 = 100
+      sig.level = 0.05
+          power = 0.8467011
+    alternative = two.sided
+
+NOTE: different sample sizes</code></pre>
+</div>
+</div>
+<p>This (300:100) enrollment will have <strong>84.6% power</strong> to detect a change from 15% to 5% mortality, with a two-sided alpha of 0.05.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
