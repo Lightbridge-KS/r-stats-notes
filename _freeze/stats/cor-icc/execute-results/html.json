@@ -1,0 +1,17 @@
+{
+  "hash": "0d7573ef99807ec7ae4b61b4358192b0",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"ICC\"\n---\n\n\n\n\n\n\n## Interclass correlation coefficient (ICC)\n\n### Example\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Simulated radiomics features data for 5 subjects and 2 observers\nradiomics_data <- data.frame(\n  Subject = 1:5,\n  Observer1_Feature1 = c(0.75, 0.82, 0.91, 0.85, 0.88),\n  Observer2_Feature1 = c(0.73, 0.83, 0.89, 0.86, 0.87),\n  Observer1_Feature2 = c(100, 102, 105, 108, 107),\n  Observer2_Feature2 = c(99, 101, 104, 109, 106)\n)\n\nradiomics_data\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n  Subject Observer1_Feature1 Observer2_Feature1 Observer1_Feature2\n1       1               0.75               0.73                100\n2       2               0.82               0.83                102\n3       3               0.91               0.89                105\n4       4               0.85               0.86                108\n5       5               0.88               0.87                107\n  Observer2_Feature2\n1                 99\n2                101\n3                104\n4                109\n5                106\n```\n\n\n:::\n:::\n\n\n\n\n### ICC using `{irr}`\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(irr)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nLoading required package: lpSolve\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'lpSolve' was built under R version 4.3.3\n```\n\n\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n# ICC for Feature 1 across both observers\nfeature1_data <- radiomics_data[, c(\"Observer1_Feature1\", \"Observer2_Feature1\")]\nicc_feature1 <- icc(feature1_data, model = \"twoway\", type = \"agreement\", unit = \"single\")\n\nicc_feature1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n Single Score Intraclass Correlation\n\n   Model: twoway \n   Type : agreement \n\n   Subjects = 5 \n     Raters = 2 \n   ICC(A,1) = 0.972\n\n F-Test, H0: r0 = 0 ; H1: r0 > 0 \n  F(4,4.95) = 66.4 , p = 0.000171 \n\n 95%-Confidence Interval for ICC Population Values:\n  0.805 < ICC < 0.997\n```\n\n\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nradiomics_data |> \n  ggplot(aes(Observer1_Feature1, Observer2_Feature1)) +\n  geom_point() + \n  geom_smooth(method = \"lm\")\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\n`geom_smooth()` using formula = 'y ~ x'\n```\n\n\n:::\n\n::: {.cell-output-display}\n![](cor-icc_files/figure-html/unnamed-chunk-4-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "cor-icc_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

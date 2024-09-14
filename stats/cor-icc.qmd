@@ -1,0 +1,52 @@
+---
+title: "ICC"
+---
+
+```{r setup, include=FALSE}
+here::i_am("stats/cor-icc.qmd")
+library(here)
+library(tidyverse)
+```
+
+## Interclass correlation coefficient (ICC)
+
+### Example
+
+```{r}
+# Simulated radiomics features data for 5 subjects and 2 observers
+radiomics_data <- data.frame(
+  Subject = 1:5,
+  Observer1_Feature1 = c(0.75, 0.82, 0.91, 0.85, 0.88),
+  Observer2_Feature1 = c(0.73, 0.83, 0.89, 0.86, 0.87),
+  Observer1_Feature2 = c(100, 102, 105, 108, 107),
+  Observer2_Feature2 = c(99, 101, 104, 109, 106)
+)
+
+radiomics_data
+```
+
+### ICC using `{irr}`
+
+```{r}
+library(irr)
+```
+
+
+
+```{r}
+# ICC for Feature 1 across both observers
+feature1_data <- radiomics_data[, c("Observer1_Feature1", "Observer2_Feature1")]
+icc_feature1 <- icc(feature1_data, model = "twoway", type = "agreement", unit = "single")
+
+icc_feature1
+```
+
+```{r}
+radiomics_data |> 
+  ggplot(aes(Observer1_Feature1, Observer2_Feature1)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+
+
