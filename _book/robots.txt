@@ -1,1 +1,0 @@
-Sitemap: https://r-stats-lightbridge.netlify.app/sitemap.xml
