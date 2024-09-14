@@ -1,5 +1,5 @@
 ---
-title: "ICC"
+title: "Inter-rator"
 ---
 
 ```{r setup, include=FALSE}
@@ -8,9 +8,61 @@ library(here)
 library(tidyverse)
 ```
 
-## Interclass correlation coefficient (ICC)
+```{r}
+library(irr)
+library(yardstick)
+```
 
-### Example
+- [Inter-rater reliability](https://www.andywills.info/rminr/irr.html)
+
+- [DataNovia](https://www.datanovia.com/en/lessons/inter-rater-reliability-analyses-quick-r-codes/)
+
+## Cohen Kappa
+
+```{r}
+# Diagnoses data
+data("diagnoses", package = "irr")
+diagnoses
+```
+
+### Plot
+
+```{r}
+cm_r1r2 <- conf_mat(diagnoses, truth = rater1, estimate = rater2)
+autoplot(cm_r1r2, type = "heatmap")
+```
+
+### Calculate Cohen’s kappa
+ 
+The Cohen’s kappa corresponds to the unweighted kappa. It can be used for two nominal or two ordinal categorical variables
+
+
+```{r}
+diagnoses |> 
+  select(rater1, rater2) |> 
+  kappa2(weight = "unweighted")
+```
+
+
+## Intraclass correlation coefficient (ICC)
+
+### DataNovia
+
+```{r}
+data("anxiety", package = "irr")
+head(anxiety, 4)
+```
+
+
+```{r}
+icc(
+  anxiety, model = "twoway", 
+  type = "agreement", unit = "single"
+  )
+```
+
+
+### Radiomics Example
 
 ```{r}
 # Simulated radiomics features data for 5 subjects and 2 observers
@@ -25,18 +77,14 @@ radiomics_data <- data.frame(
 radiomics_data
 ```
 
-### ICC using `{irr}`
-
-```{r}
-library(irr)
-```
-
-
 
 ```{r}
 # ICC for Feature 1 across both observers
 feature1_data <- radiomics_data[, c("Observer1_Feature1", "Observer2_Feature1")]
-icc_feature1 <- icc(feature1_data, model = "twoway", type = "agreement", unit = "single")
+icc_feature1 <- icc(feature1_data, 
+                    model = "twoway", 
+                    type = "agreement", 
+                    unit = "single")
 
 icc_feature1
 ```
