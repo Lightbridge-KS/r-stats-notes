@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: f6f7446d-b0b0-44e4-88d2-c2ce31c99ba8
+      url: 'https://r-stats-lightbridge.netlify.app'

@@ -1,0 +1,5 @@
+[[plugins]]
+package = "@quarto/netlify-plugin-quarto"
+
+[build]
+  publish = "_book" 
