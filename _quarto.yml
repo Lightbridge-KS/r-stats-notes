@@ -44,6 +44,9 @@ book:
     - part: "Performace"
       chapters:
       - "misc/parallel.qmd"
+    - part: "Misc"
+      chapters:
+      - "misc/de-iden.qmd"
     - summary.qmd
     - references.qmd
 

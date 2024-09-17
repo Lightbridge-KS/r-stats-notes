@@ -1,0 +1,95 @@
+---
+title: "De-identify"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+here::i_am("misc/de-iden.qmd")
+library(here)
+
+```
+
+
+To securely encrypt sensitive data such as a Hospital Number (HN) in R, you can use cryptographic libraries like `openssl` or `sodium`. These libraries provide robust encryption and decryption functions. 
+
+## Using `sodium`
+
+### Steps
+
+1. **Generate a Secret Key**: A secret key will be used for encryption and decryption.
+2. **Encrypt the HN**: Convert the Hospital Number into a cipher text (encrypted form).
+3. **Decrypt the HN**: Retrieve the original Hospital Number with the secret key.
+
+### Example
+
+```{r}
+library(sodium)
+```
+
+1. Generate a secret key (must be securely stored and shared)
+
+```{r}
+set.seed(123)
+
+key <- sodium::keygen()  # Generates a 32-byte random key
+key
+```
+
+Save the key securely, e.g., in a secure environment variable or encrypted storage
+
+```{r}
+saveRDS(key, here("data/de-iden/secret_key.rds"))
+```
+
+2. Function to encrypt the Hospital Number
+
+```{r encrypt_hn}
+encrypt_hn <- function(hn, key) {
+  
+  hn_raw <- charToRaw(hn) # Convert HN to raw bytes
+  encrypted_hn <- sodium::data_encrypt(hn_raw, key)
+  encrypted_hn
+  
+}
+```
+
+```{r}
+encrypt_hn("123", key = key)
+```
+
+
+3. Function to decrypt the Hospital Number (with permission)
+
+```{r decrypt_hn}
+decrypt_hn <- function(encrypted_hn, key) {
+  
+  decrypted_raw <- sodium::data_decrypt(encrypted_hn, key)
+  hn <- rawToChar(decrypted_raw) # Convert decrypted raw bytes back to character string
+  hn
+}
+```
+
+Example usage:
+
+```{r}
+hn <- "123456"                       # Hospital Number
+encrypted_hn <- encrypt_hn(hn, key)     # Encrypt HN
+print(encrypted_hn)                     # Display encrypted value (not readable)
+
+# Now decrypt (ensure permission and use of the same key)
+decrypted_hn <- decrypt_hn(encrypted_hn, key)
+print(decrypted_hn)                     # Display original HN
+```
+
+### Key Points:
+
+
+- **Secret Key**: You need to securely store and protect the key (e.g., using an encrypted vault or environment variable). Without the key, the data cannot be decrypted.
+- **Encryption**: The `data_encrypt` function ensures that the data is transformed into an unreadable format (ciphertext).
+- **Decryption**: The `data_decrypt` function reverses the process, recovering the original data, but only with the correct key.
+
+### Security Considerations:
+- **Key Management**: The secret key must be handled carefully, ensuring only authorized users can access it.
+- **Permission Controls**: Implement proper access control for who can decrypt the data, potentially using access logs or two-factor authentication.
+
+This approach provides secure encryption and decryption for sensitive data such as Hospital Numbers, making it recoverable only by authorized personnel with the correct permissions.
